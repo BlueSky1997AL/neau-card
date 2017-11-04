@@ -1,8 +1,8 @@
 {
   "name": "neau-card",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Provide APIs for card.neau.edu.cn data crawler",
-  "private": true,
+  "private": false,
   "dependencies": {
     "egg": "^1.9.0",
     "egg-scripts": "^2.1.0"
@@ -37,7 +37,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:BlueSky1997AL/neau-card.git"
   },
   "author": "Jser@Allen Lawrence",
   "license": "MIT"
