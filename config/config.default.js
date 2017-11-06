@@ -9,5 +9,9 @@ module.exports = appInfo => {
   // add your config here
   config.middleware = [];
 
+  config.login = {
+    serverUrl: 'http://card.neau.edu.cn/',
+  };
+
   return config;
 };
