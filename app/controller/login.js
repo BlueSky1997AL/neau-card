@@ -22,8 +22,8 @@ module.exports = app => {
       const psw = ctx.query.password;
       const captcha = ctx.query.chkCode;
 
-      const res = await ctx.service.loginActions.login(stuId, psw, captcha, cookie);
-      ctx.body = res;
+      const result = await ctx.service.loginActions.login(stuId, psw, captcha, cookie);
+      ctx.body = result;
     }
   }
   return LoginController;
