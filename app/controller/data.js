@@ -4,18 +4,18 @@ module.exports = app => {
   class DataFetcherController extends app.Controller {
     async getBasicInfo() {
       const ctx = this.ctx;
-      const cookie = ctx.query.cookie;
+      const { cookie } = ctx.query;
 
       const data = await ctx.service.dataActions.getBasicInfo(cookie);
-      return data;
+      ctx.body = data;
     }
 
     async getDailyExpRec() {
       const ctx = this.ctx;
-      const cookie = ctx.query.cookie;
+      const { cookie, accountId } = ctx.query;
 
-      const data = await ctx.service.dataActions.getDailyExpRec(cookie);
-      return data;
+      const data = await ctx.service.dataActions.getDailyExpRec(cookie, accountId);
+      ctx.body = data;
     }
   }
   return DataFetcherController;

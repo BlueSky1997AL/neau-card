@@ -18,6 +18,9 @@ module.exports = app => {
      */
     async request(target, options) {
       const opts = Object.assign({
+        // Enable when needed
+        // enableProxy: true,
+        // proxy: 'http://cyf.feit.me:6000',
         timeout: [ '30s', '30s' ],
       }, options);
 
@@ -48,7 +51,7 @@ module.exports = app => {
         headers: { cookie },
       });
 
-      const $ = cheerio.load(data);
+      const $ = cheerio.load(data.data);
       const dataArr = [];
       $('.neiwen').each((i, e) => {
         dataArr.push($(e).text().trim());
@@ -56,6 +59,7 @@ module.exports = app => {
       const balances = dataArr[dataArr.length - 5].split(/\（|\）|\(|\)/).filter(e => this.isEmpty(e));
 
       return {
+        accountId: dataArr[3],
         stuId: dataArr[8],
         balance: balances[0],
         transBalance: balances[2],
@@ -65,14 +69,33 @@ module.exports = app => {
     /**
      * Get daily expense records of the user
      * @param {String} cookie - Successfuly loged in cookie string
+     * @param {String} accountId - User's account ID
      * @return {Array} Daily expense records array
      */
-    async getDailyExpRec(cookie) {
-      const data = await this.request('', {
-        method: 'GET',
+    async getDailyExpRec(cookie, accountId) {
+      const data = await this.request('accounttodatTrjnObject.action', {
+        method: 'POST',
         dataType: 'text',
-        headers: { cookie },
-        data: {},
+        headers: {
+          Host: 'card.neau.edu.cn',
+          Connection: 'keep-alive',
+          'Content-Length': 53,
+          'Cache-Control': 'max-age=0',
+          Origin: 'http://card.neau.edu.cn',
+          'Upgrade-Insecure-Requests': 1,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko),Chrome/62.0.3202.75 Safari/537.36',
+          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+          Referer: 'http://card.neau.edu.cn/accounttodayTrjn.action',
+          'Accept-Encoding': 'gzip, deflate',
+          'Accept-Language': 'zh-CN,zh;q=0.9',
+          Cookie: cookie,
+        },
+        data: {
+          account: accountId,
+          inputobj: 'all',
+          Submit: '+%C8%B7+%B6%A8+',
+        },
       });
 
       // parser

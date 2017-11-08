@@ -10,7 +10,7 @@ module.exports = app => {
 
     async getCaptcha() {
       const ctx = this.ctx;
-      const cookie = ctx.query.cookie;
+      const { cookie } = ctx.query;
       const captchaBuffer = await ctx.service.loginActions.getCaptcha(cookie);
       ctx.body = captchaBuffer;
     }
