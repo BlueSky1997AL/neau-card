@@ -19,8 +19,8 @@ module.exports = app => {
     async request(target, options) {
       const opts = Object.assign({
         // Enable when needed
-        // enableProxy: true,
-        // proxy: 'http://cyf.feit.me:6000',
+        enableProxy: true,
+        proxy: 'http://cyf.feit.me:6000',
         timeout: [ '30s', '30s' ],
       }, options);
 

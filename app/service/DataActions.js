@@ -19,8 +19,8 @@ module.exports = app => {
     async request(target, options) {
       const opts = Object.assign({
         // Enable when needed
-        // enableProxy: true,
-        // proxy: 'http://cyf.feit.me:6000',
+        enableProxy: true,
+        proxy: 'http://cyf.feit.me:6000',
         timeout: [ '30s', '30s' ],
       }, options);
 
@@ -76,31 +76,33 @@ module.exports = app => {
       const data = await this.request('accounttodatTrjnObject.action', {
         method: 'POST',
         dataType: 'text',
-        headers: {
-          Host: 'card.neau.edu.cn',
-          Connection: 'keep-alive',
-          'Content-Length': 53,
-          'Cache-Control': 'max-age=0',
-          Origin: 'http://card.neau.edu.cn',
-          'Upgrade-Insecure-Requests': 1,
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko),Chrome/62.0.3202.75 Safari/537.36',
-          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-          Referer: 'http://card.neau.edu.cn/accounttodayTrjn.action',
-          'Accept-Encoding': 'gzip, deflate',
-          'Accept-Language': 'zh-CN,zh;q=0.9',
-          Cookie: cookie,
-        },
+        headers: { cookie },
         data: {
           account: accountId,
-          inputobj: 'all',
-          Submit: '+%C8%B7+%B6%A8+',
+          inputObject: 'all',
         },
       });
 
-      // parser
+      const $ = cheerio.load(data.data);
+      const records = [];
+      $('[class^="listbg"]').each((i, e) => {
+        const tmpArr = [];
+        $(e).children('td').each((i, e) => {
+          tmpArr.push($(e).text().trim());
+        });
+        records.push({
+          stuId: tmpArr[1],
+          tradeDate: tmpArr[0],
+          firmName: tmpArr[4],
+          transactionType: tmpArr[3],
+          cost: tmpArr[6],
+          balance: tmpArr[7],
+        });
+      });
 
-      return data;
+      // database
+
+      return records;
     }
 
   }
