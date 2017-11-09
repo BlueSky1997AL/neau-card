@@ -4,6 +4,7 @@ module.exports = app => {
   class LoginController extends app.Controller {
     async getCookie() {
       const ctx = this.ctx;
+
       const cookie = await ctx.service.loginActions.getCookie();
       ctx.body = cookie;
     }
@@ -11,18 +12,16 @@ module.exports = app => {
     async getCaptcha() {
       const ctx = this.ctx;
       const { cookie } = ctx.query;
+
       const captchaBuffer = await ctx.service.loginActions.getCaptcha(cookie);
       ctx.body = captchaBuffer;
     }
 
     async login() {
       const ctx = this.ctx;
-      const cookie = ctx.query.cookie;
-      const stuId = ctx.query.username;
-      const psw = ctx.query.password;
-      const captcha = ctx.query.chkCode;
+      const { cookie, username, password, chkCode } = ctx.query;
 
-      const result = await ctx.service.loginActions.login(stuId, psw, captcha, cookie);
+      const result = await ctx.service.loginActions.login(username, password, chkCode, cookie);
       ctx.body = result;
     }
   }

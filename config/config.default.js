@@ -13,5 +13,12 @@ module.exports = appInfo => {
     serverUrl: 'http://card.neau.edu.cn/',
   };
 
+  config.curlOpts = {
+    // Enable proxy when needed
+    enableProxy: true,
+    proxy: 'http://cyf.feit.me:6000',
+    timeout: [ '30s', '30s' ],
+  };
+
   return config;
 };

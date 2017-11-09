@@ -8,29 +8,25 @@ module.exports = app => {
       super(ctx);
       this.config = this.ctx.app.config.login;
       this.serverUrl = this.config.serverUrl;
+      this.curlOpts = this.config.curlOpts;
     }
 
     /**
-     * Request module
+     * Request function
      * @param {String} target - API target
      * @param {Object} options - Request options
-     * @return {Object} Response content
+     * @return {Object} Response data
      */
     async request(target, options) {
-      const opts = Object.assign({
-        // Enable when needed
-        enableProxy: true,
-        proxy: 'http://cyf.feit.me:6000',
-        timeout: [ '30s', '30s' ],
-      }, options);
+      const opts = Object.assign({}, this.curlOpts, options);
 
-      const result = await this.ctx.curl(`${this.serverUrl}${target}`, opts);
-      return result;
+      const data = await this.ctx.curl(`${this.serverUrl}${target}`, opts);
+      return data;
     }
 
     /**
-     * Get cookie of the website
-     * @return {String} cookie date
+     * Get cookie from the website
+     * @return {String} Cookie string
      */
     async getCookie() {
       const data = await this.request('homeLogin.action', {
@@ -43,7 +39,7 @@ module.exports = app => {
     }
 
     /**
-     * Get captcha of the login action
+     * Get captcha with cookie message
      * @param {String} cookie - Cookie from card.neau.edu.cn
      * @return {Buffer} Base64 image buffer
      */
@@ -52,18 +48,17 @@ module.exports = app => {
         method: 'GET',
         headers: { cookie },
       });
-      const result = data.data;
 
-      return result;
+      return data.data;
     }
 
     /**
-     * Login Actions simulation
-     * @param {String} stuId - Username of the user
-     * @param {String} psw - Password of the user
+     * Login simulation
+     * @param {String} stuId - Username
+     * @param {String} psw - Password
      * @param {String} captcha - Verify code
-     * @param {String} cookie - Cookie from the website
-     * @return {Object} An object included login status and message
+     * @param {String} cookie - Cookie
+     * @return {Object} An object including login status and messages
      */
     async login(stuId, psw, captcha, cookie) {
       const data = await this.request('loginstudent.action', {
@@ -86,7 +81,7 @@ module.exports = app => {
       }
 
       const $ = cheerio.load(data.data);
-      return { status: 'fail', msg: $('.biaotou').text() };
+      return { status: 'failure', msg: $('.biaotou').text() };
     }
   }
   return LoginActions;

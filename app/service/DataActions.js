@@ -8,29 +8,25 @@ module.exports = app => {
       super(ctx);
       this.config = this.ctx.app.config.login;
       this.serverUrl = this.config.serverUrl;
+      this.curlOpts = this.config.curlOpts;
     }
 
     /**
-     * Request module
+     * Request function
      * @param {String} target - API target
      * @param {Object} options - Request options
-     * @return {Object} Response content
+     * @return {Object} Response data
      */
     async request(target, options) {
-      const opts = Object.assign({
-        // Enable when needed
-        enableProxy: true,
-        proxy: 'http://cyf.feit.me:6000',
-        timeout: [ '30s', '30s' ],
-      }, options);
+      const opts = Object.assign({}, this.curlOpts, options);
 
-      const result = await this.ctx.curl(`${this.serverUrl}${target}`, opts);
-      return result;
+      const data = await this.ctx.curl(`${this.serverUrl}${target}`, opts);
+      return data;
     }
 
     /**
      * Judge a string is empty or not
-     * @param {String} e - String needed to be evaluate
+     * @param {String} e - Target string
      * @return {String} String that is not empty
      */
     isEmpty(e) {
@@ -41,7 +37,7 @@ module.exports = app => {
 
     /**
      * Get basic infomation of the user
-     * @param {String} cookie - Successfuly loged in cookie string
+     * @param {String} cookie - Cookie string with successful login status
      * @return {Object} Basic information object
      */
     async getBasicInfo(cookie) {
@@ -68,7 +64,7 @@ module.exports = app => {
 
     /**
      * Get daily expense records of the user
-     * @param {String} cookie - Successfuly loged in cookie string
+     * @param {String} cookie - Cookie string with successful login status
      * @param {String} accountId - User's account ID
      * @return {Array} Daily expense records array
      */
