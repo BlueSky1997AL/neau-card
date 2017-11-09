@@ -8,7 +8,7 @@ module.exports = app => {
       super(ctx);
       this.config = this.ctx.app.config.login;
       this.serverUrl = this.config.serverUrl;
-      this.curlOpts = this.config.curlOpts;
+      this.curlOpts = this.ctx.app.config.curlOpts;
     }
 
     /**
