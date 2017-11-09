@@ -1,33 +1,36 @@
-# neau-card
+# NEAU Card
+> for [NEAU Official Card Management System](http://card.neau.edu.cn)
 
-Provide APIs for card.neau.edu.cn data crawler
+获取校园一卡通余额，流水信息等API接口及Web App设计
 
-## QuickStart
+## Installing / Getting started
 
-<!-- add docs here for user -->
-
-see [egg docs][egg] for more detail.
-
-### Development
-
-```bash
-$ npm i
-$ npm run dev
-$ open http://localhost:7001/
+```shell
+git clone https://github.com/BlueSky1997AL/neau-card.git
 ```
 
-### Deploy
+## Developing
 
-```bash
-$ npm start
-$ npm stop
-```
+### Built With
+- egg.js
+- cheerio
+- webpack
+- Vue.js
+- vux
 
-### npm scripts
+### Prerequisites
+- node v8+
 
-- Use `npm run lint` to check code style.
-- Use `npm test` to run unit test.
-- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
+### Setting up Dev
 
+## Configuration
 
-[egg]: https://eggjs.org
+## Tests
+
+## Style guide
+
+https://github.com/airbnb/javascript
+
+## Api Reference
+
+## Database
