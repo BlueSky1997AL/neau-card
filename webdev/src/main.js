@@ -4,19 +4,24 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-import Home from './components/HelloFromVux'
 import LoginPage from './components/LoginPage'
+import InfoCard from './components/InfoCard'
+import BalanceInfo from './views/BalanceInfo'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    component: Home
+    component: BalanceInfo
   },
   {
     path: '/login',
     component: LoginPage
+  },
+  {
+    path: '/cardCompDev',
+    component: InfoCard
   }
 ]
 
