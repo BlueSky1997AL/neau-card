@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <info-card stuId="A19150191" balance="38.92" updateTime="今天18:00" :showInfo="showStatus"></info-card>
+    <info-card stu-id="A19150191" balance="38.92" update-time="今天18:00" :show-info="showStatus" :update="updateData"></info-card>
   </div>
 </template>
 
@@ -18,7 +18,9 @@ export default {
     }
   },
   methods: {
-
+    updateData () {
+      alert('hello world')
+    }
   },
   watch: {},
   created: function () {
@@ -28,6 +30,6 @@ export default {
 </script>
 <style>
 .main-container {
-  padding: 0 25px;
+  padding: 12px 25px;
 }
 </style>
