@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <info-card stu-id="A19150191" balance="38.92" update-time="今天18:00" :show-info="showStatus" :update="updateData"></info-card>
+    <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData"></info-card>
   </div>
 </template>
 
@@ -14,17 +14,25 @@ export default {
   },
   data () {
     return {
-      showStatus: true
+      stuId: 'A19150191',
+      showStatus: true,
+      balance: '32.58',
+      updateTime: '今天18:00'
     }
   },
   methods: {
     updateData () {
       alert('hello world')
+    },
+    changeDisplayStatus (val) {
+      this.showStatus = val
     }
   },
   watch: {},
   created: function () {
-
+    setTimeout(() => {
+      this.balance = '66.66'
+    }, 5000)
   }
 }
 </script>

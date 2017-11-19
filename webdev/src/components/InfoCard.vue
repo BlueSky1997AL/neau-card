@@ -65,13 +65,18 @@ export default {
   },
   watch: {
     balance: function () {
-      this.displayedBalance = this.balance
+      if (this.displayedBalance === '*****') {
+        return
+      } else {
+        this.displayedBalance = this.balance
+      }
     },
     showInfo: function () {
       this.displayStatus = this.showInfo
     },
     displayStatus: function (val) {
-      this.$emit('show-info', val)
+      this.toggleDisplay()
+      this.$emit('display-status-change', val)
     }
   },
   computed: {},
