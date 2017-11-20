@@ -31,7 +31,7 @@ export default {
   watch: {},
   created: function () {
     setTimeout(() => {
-      this.balance = '66.66'
+      this.balance = '93.67'
     }, 5000)
   }
 }

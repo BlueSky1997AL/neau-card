@@ -82,7 +82,6 @@ export default {
   computed: {},
   created: function () {
     this.toggleDisplay()
-    this.toggleDisplay()
   }
 }
 </script>
