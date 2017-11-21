@@ -17,6 +17,9 @@
 </template>
 
 <script>
+const showImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAeCAYAAABuUU38AAAABHNCSVQICAgIfAhkiAAAAipJREFUWIXdmK9XAkEQxz9z6SJNTBKJmjyT2rARjUSjf4rRaDTSpIlJTBKNmjwb8doYboBDgdvbPeTh9z3eu3fszO735ueOUBNUtQnsAftA0143gdieMyC15xT4BL5EJKUGSIiwqraAQ6DN/MBVkQFvwFhE3n3PUpmIqsbAMXAENHw3XoEJ8Aq8iEhWRdCZSIHACf5f3xUZ8CwiT64CTkTMhbrUb4EyTIC+i8uVElHVU+C8jlMF4LHMOiuJmCv1mGegbSMF7lbFzlIilkq7+JOYACPgfZpeTWcLSPB30RS4F5HJzz9+EbENe/gH9EBERusWqGoCdDz1Z+SWWag/C0TMna7xJ3HrWuDsg1157pMBN0U3iwqKpzERYgnnKm1rB557xUDPzgwUiBAYE2XutAwm88vfHTGNY8CImM+2PRVCHtjbkG2r6iFAZOY5C1AG4N0jBcoCdFQ1jsjNE9RyhHSwNXS/MdCNSpftCCKgT57OvGGp9M9lDRnQjywXDwOVtbYkC3nazyKYpcG3AGXJlmTHIjKGxTrSZ34VrYqGpfBKMJmQvmtWUGdEzMXu8I+XThV/V9U24f3W7KybaBofRORl3QJVPQYuPPWXN42FjRrAJWFt/DPw8aONPyC/Km++jZ/iX1ysilDVM8JbmFAMRWRtidiF4cO9SxtTaa5l1kn4m3HQsMrVwHdAl5BPGDcxoBsDo40N6JZhp0emq2DptfiD9UPsFEjrGmJ/AxF43zo0geHTAAAAAElFTkSuQmCC'
+const hideImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAeCAYAAABuUU38AAAABHNCSVQICAgIfAhkiAAAAlJJREFUWIXdmK+T2kAUxz8vCllX6pCVVJWq3rmTyJP3pyGRkedKVe9UI5G45hwy7lXkJSTHJuxuls7QzwwzkGw2++X92n1CIlR1DnwEPgFzuzwHZva9Akr7XgJ/gDcRKUmATHlYVRfAEvjMacGhVMAeKETkELuWYCGqOgO+Al+AD7EvHuAI/AZeRaQKedBbSEfAN+L/fV8q4JeI/PR9wEuIudCa9Ba4xBHIfVzuohBV/Q7cp1jVBH5css6gEHOlJ04ZyIcDsLjCWKgz3WYodjLXRUuloSJyEdkAhcfYwsbmAfPPgSdVdbr3mUU6IkICOheRVoCqrqnTsotCRPLO2CV1/PlSUVumV396Fum4U4iIQ1cEgC3UZZmeCBtbULuZLzNqy/TW2AqJFAGwMAv0cIg5E2HvXRMWK+AQ07qWqj5SV+hYxhbKyL0hF/RhLyJbMCGqugIeJkzY4BTjIoGIhlxEiszMc5dgQoCly83ek1AEwIOqziSBS7kYtExiEQ17Zx25RTLqohS007zAaJyMpOZYKiDPrOTvEk3qFeyJxTyLSJXZxC/Uh5spDKZfzzoT+84C+pU953QUjZlwrE44s9lEMSXw3PxohZiLbQiPl4NnsRsTE3rEbfZb7Vp7WStSzMI2fi0jKfZMjD0bskU5EwED5xHbKj8Svo0vPOtEISJ5xM63BLYicnx/4785WPkcde9It4WJZScioyXiFpoPW58mXlBfy6yz4t+0g3ZW37yIbdCtqAP6Gg26Ani5WoPOxU23TIewpkX3A+NN7BIoUzWx/wKYaiFaWyD52wAAAABJRU5ErkJggg=='
+
 export default {
   name: 'info-card',
   props: {
@@ -55,11 +58,20 @@ export default {
       if (this.displayStatus) {
         this.displayStatus = false
         this.displayedBalance = '*****'
-        this.showBtn = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAeCAYAAABuUU38AAAABHNCSVQICAgIfAhkiAAAAipJREFUWIXdmK9XAkEQxz9z6SJNTBKJmjyT2rARjUSjf4rRaDTSpIlJTBKNmjwb8doYboBDgdvbPeTh9z3eu3fszO735ueOUBNUtQnsAftA0143gdieMyC15xT4BL5EJKUGSIiwqraAQ6DN/MBVkQFvwFhE3n3PUpmIqsbAMXAENHw3XoEJ8Aq8iEhWRdCZSIHACf5f3xUZ8CwiT64CTkTMhbrUb4EyTIC+i8uVElHVU+C8jlMF4LHMOiuJmCv1mGegbSMF7lbFzlIilkq7+JOYACPgfZpeTWcLSPB30RS4F5HJzz9+EbENe/gH9EBERusWqGoCdDz1Z+SWWag/C0TMna7xJ3HrWuDsg1157pMBN0U3iwqKpzERYgnnKm1rB557xUDPzgwUiBAYE2XutAwm88vfHTGNY8CImM+2PRVCHtjbkG2r6iFAZOY5C1AG4N0jBcoCdFQ1jsjNE9RyhHSwNXS/MdCNSpftCCKgT57OvGGp9M9lDRnQjywXDwOVtbYkC3nazyKYpcG3AGXJlmTHIjKGxTrSZ34VrYqGpfBKMJmQvmtWUGdEzMXu8I+XThV/V9U24f3W7KybaBofRORl3QJVPQYuPPWXN42FjRrAJWFt/DPw8aONPyC/Km++jZ/iX1ysilDVM8JbmFAMRWRtidiF4cO9SxtTaa5l1kn4m3HQsMrVwHdAl5BPGDcxoBsDo40N6JZhp0emq2DptfiD9UPsFEjrGmJ/AxF43zo0geHTAAAAAElFTkSuQmCC'
+        this.showBtn = showImg
       } else {
         this.displayStatus = true
         this.displayedBalance = this.balance
-        this.showBtn = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAeCAYAAABuUU38AAAABHNCSVQICAgIfAhkiAAAAlJJREFUWIXdmK+T2kAUxz8vCllX6pCVVJWq3rmTyJP3pyGRkedKVe9UI5G45hwy7lXkJSTHJuxuls7QzwwzkGw2++X92n1CIlR1DnwEPgFzuzwHZva9Akr7XgJ/gDcRKUmATHlYVRfAEvjMacGhVMAeKETkELuWYCGqOgO+Al+AD7EvHuAI/AZeRaQKedBbSEfAN+L/fV8q4JeI/PR9wEuIudCa9Ba4xBHIfVzuohBV/Q7cp1jVBH5css6gEHOlJ04ZyIcDsLjCWKgz3WYodjLXRUuloSJyEdkAhcfYwsbmAfPPgSdVdbr3mUU6IkICOheRVoCqrqnTsotCRPLO2CV1/PlSUVumV396Fum4U4iIQ1cEgC3UZZmeCBtbULuZLzNqy/TW2AqJFAGwMAv0cIg5E2HvXRMWK+AQ07qWqj5SV+hYxhbKyL0hF/RhLyJbMCGqugIeJkzY4BTjIoGIhlxEiszMc5dgQoCly83ek1AEwIOqziSBS7kYtExiEQ17Zx25RTLqohS007zAaJyMpOZYKiDPrOTvEk3qFeyJxTyLSJXZxC/Uh5spDKZfzzoT+84C+pU953QUjZlwrE44s9lEMSXw3PxohZiLbQiPl4NnsRsTE3rEbfZb7Vp7WStSzMI2fi0jKfZMjD0bskU5EwED5xHbKj8Svo0vPOtEISJ5xM63BLYicnx/4785WPkcde9It4WJZScioyXiFpoPW58mXlBfy6yz4t+0g3ZW37yIbdCtqAP6Gg26Ani5WoPOxU23TIewpkX3A+NN7BIoUzWx/wKYaiFaWyD52wAAAABJRU5ErkJggg=='
+        this.showBtn = hideImg
+      }
+    },
+    refreshInfo () {
+      if (this.displayStatus) {
+        this.displayedBalance = this.balance
+        this.showBtn = hideImg
+      } else {
+        this.displayedBalance = '*****'
+        this.showBtn = showImg
       }
     }
   },
@@ -75,13 +87,13 @@ export default {
       this.displayStatus = this.showInfo
     },
     displayStatus: function (val) {
-      this.toggleDisplay()
+      this.refreshInfo()
       this.$emit('display-status-change', val)
     }
   },
   computed: {},
   created: function () {
-    this.toggleDisplay()
+    this.refreshInfo()
   }
 }
 </script>
