@@ -1,6 +1,6 @@
 <template>
   <div id="component">
-    <div id="main" style="width: 375px;height: 170px;"></div>
+    <div id="main" style="width: 100%; height: 170px;"></div>
   </div>
 </template>
 
@@ -12,73 +12,31 @@ export default {
   name: 'line-chart',
   props: {
     'rec-data': {
-      type: Array,
+      type: Object,
       default: function () {
-        return [
-          {
-            date: '01-01',
-            cost: 13.62
-          },
-          {
-            date: '01-02',
-            cost: 16.25
-          },
-          {
-            date: '01-03',
-            cost: 23.50
-          },
-          {
-            date: '01-04',
-            cost: 7.50
-          },
-          {
-            date: '01-05',
-            cost: 30.21
-          },
-          {
-            date: '01-06',
-            cost: 5.68
-          },
-          {
-            date: '01-07',
-            cost: 17.21
-          }
-        ]
-      }
-    },
-    hello: {
-      type: String,
-      default: 'world'
-    }
-  },
-  data () {
-    return {}
-  },
-  methods: {
-    generateDataArr (arr) {
-    // this 指针指向不正确，不可使用this指针，改用参数传递
-      return {
-        date () {
-          const tmpArr = []
-          arr.forEach((v) => {
-            tmpArr.push(v.date)
-          })
-          return tmpArr
-        },
-        cost () {
-          const tmpArr = []
-          arr.forEach((v) => {
-            tmpArr.push(v.cost)
-          })
-          return tmpArr
+        return {
+          date: ['01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07'],
+          cost: [12.34, 56.78, 12.34, 90.12, 34.56, 34.12, 12.34]
         }
       }
     }
   },
-  watch: {},
-  computed: {},
+  data () {
+    return {
+      chart: ''
+    }
+  },
+  watch: {
+    recData () {
+      this.chart.setOption({
+        xAxis: [ { data: this.recData.date } ],
+        series: [ { data: this.recData.cost } ]
+      })
+    }
+  },
   mounted: function () {
     const chart = eChartsModule.echarts.init(document.getElementById('main'))
+    this.chart = chart
 
     const option = {
       tooltip: {
@@ -102,7 +60,7 @@ export default {
           position: 'bottom',
           offset: 15,
           boundaryGap: true,
-          data: this.generateDataArr(this.recData).date(),
+          data: this.recData.date,
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
@@ -120,7 +78,6 @@ export default {
         {
           name: '当日消费金额',
           type: 'line',
-          stack: '总量',
           smooth: true,
           itemStyle: {
             normal: {
@@ -159,11 +116,8 @@ export default {
     chart.setOption(option)
 
     setTimeout(() => {
-      option.series[0].data = this.generateDataArr(this.recData).cost()
-      chart.setOption(option)
+      chart.setOption({series: [ { data: this.recData.cost } ]})
     }, 400)
   }
 }
 </script>
-<style>
-</style>
