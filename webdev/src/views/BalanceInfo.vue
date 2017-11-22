@@ -3,18 +3,21 @@
     <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData"></info-card>
     <div class="section-label">最近七天消费</div>
     <line-chart :rec-data="recDataSample"></line-chart>
+    <detail-record class="dr-component"></detail-record>
   </div>
 </template>
 
 <script>
 import InfoCard from '../components/InfoCard.vue'
 import LineChart from '../components/LineChart.vue'
+import DetailRecord from '../components/DetailRecord.vue'
 
 export default {
   props: {},
   components: {
     InfoCard,
-    LineChart
+    LineChart,
+    DetailRecord
   },
   data () {
     return {
@@ -52,12 +55,20 @@ export default {
 }
 /* Dev Style Sheet End*/
 
-
 .main-container {
   padding: 12px 25px;
 }
 
 .section-label {
   font-size: 20px;
+  font-weight: bold;
+}
+
+body {
+  background-color: white;
+}
+
+.dr-component {
+  margin-top: 7px;
 }
 </style>

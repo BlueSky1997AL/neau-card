@@ -1,6 +1,6 @@
 <template>
-  <div id="component">
-    <div id="main" style="width: 100%; height: 170px;"></div>
+  <div id="line-chart-component">
+    <div id="main" style="width: 100%; height: 117.5px;"></div>
   </div>
 </template>
 
@@ -49,22 +49,23 @@ export default {
         }
       },
       grid: {
-        top: '8.25%',
-        left: '3%',
-        right: '3%',
+        top: '20%',
+        left: '0%',
+        right: '0%',
         bottom: '20%'
       },
       xAxis: [
         {
           type: 'category',
           position: 'bottom',
-          offset: 15,
+          offset: 5,
           boundaryGap: true,
           data: this.recData.date,
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
-            color: '#AAA'
+            color: '#AAA',
+            fontSize: 10
           }
         }
       ],
@@ -104,7 +105,8 @@ export default {
             normal: {
               show: true,
               color: '#0097FF',
-              position: 'top'
+              position: 'top',
+              fontSize: 10
             }
           }
         }

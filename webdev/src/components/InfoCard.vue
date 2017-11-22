@@ -1,5 +1,5 @@
 <template>
-  <div id="component">
+  <div id="info-card-component">
     <div id="main-container">
       <span id="stuid-label">东北农业大学学生卡 {{stuId}}</span>
       <img src="../assets/neau_logo.svg" alt="neau_logo" id="logo">
@@ -98,7 +98,7 @@ export default {
 }
 </script>
 <style>
-  #component {
+  #info-card-component {
     position: relative;
     width: 100%;
     height: 170px;
@@ -177,6 +177,7 @@ export default {
 
   #update-btn {
     display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
     width: 40px;
     height: 16.5px;
     border-radius: 9.5px;

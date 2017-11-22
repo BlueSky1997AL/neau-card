@@ -8,6 +8,7 @@ import LoginPage from './components/LoginPage'
 import InfoCard from './components/InfoCard'
 import BalanceInfo from './views/BalanceInfo'
 import LineChart from './components/LineChart'
+import DetailRecord from './components/DetailRecord.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,10 @@ const routes = [
   {
     path: '/lcCompDev',
     component: LineChart
+  },
+  {
+    path: '/rdCompDev',
+    component: DetailRecord
   }
 ]
 
