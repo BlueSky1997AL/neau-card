@@ -40,6 +40,24 @@ export default {
             seller: '支付宝充值',
             date: '2017-07-01 18:24',
             amount: +10.50
+          },
+          {
+            id: 3,
+            seller: '南区一食堂',
+            date: '2017-07-02 12:36',
+            amount: -20.35
+          },
+          {
+            id: 4,
+            seller: '棘圆',
+            date: '2017-07-02 14:13',
+            amount: -5
+          },
+          {
+            id: 5,
+            seller: '支付宝充值',
+            date: '2017-07-02 15:21',
+            amount: +50
           }
         ]
       }
