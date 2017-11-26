@@ -64,7 +64,8 @@ export default {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '5px'
+        padding: '5px',
+        paddingBottom: '0px'
       }
     }
   },
@@ -125,7 +126,5 @@ body {
   width: 95%;
   background-color: #fff;
   border-radius: 5px;
-  /* margin: 0 auto 10px; */
-  /* padding: 10px; */
 }
 </style>
