@@ -36,6 +36,47 @@ module.exports = app => {
     }
 
     /**
+     * HTML parser
+     * @param {String} html - HTML data
+     * @return {Array} Expense records array
+     */
+    recordParser(html) {
+      const $ = cheerio.load(html);
+      const records = [];
+      $('[class^="listbg"]').each((i, e) => {
+        const tmpArr = [];
+        $(e).children('td').each((i, e) => {
+          tmpArr.push($(e).text().trim());
+        });
+        records.push({
+          stuId: tmpArr[1],
+          tradeDate: tmpArr[0],
+          firmName: tmpArr[4],
+          transactionType: tmpArr[3],
+          cost: tmpArr[5],
+          balance: tmpArr[6],
+        });
+      });
+
+      return records;
+    }
+
+    /**
+     * Get total page number and cost
+     * @param {String} html - HTML data
+     * @return {Object} An Object including total page number and total cost
+     */
+    getBrief(html) {
+      const $ = cheerio.load(html);
+
+      const content = $($('.bl')[1]).text().split(/共|页|\-|\（/);
+      return {
+        totalPages: content[4],
+        totalCost: content[2],
+      };
+    }
+
+    /**
      * Get basic infomation of the user
      * @param {String} cookie - Cookie string with successful login status
      * @return {Object} Basic information object
@@ -102,32 +143,6 @@ module.exports = app => {
     }
 
     /**
-     * HTML parser
-     * @param {String} html - HTML doc
-     * @return {Array} Expense records array
-     */
-    recordParser(html) {
-      const $ = cheerio.load(html);
-      const records = [];
-      $('[class^="listbg"]').each((i, e) => {
-        const tmpArr = [];
-        $(e).children('td').each((i, e) => {
-          tmpArr.push($(e).text().trim());
-        });
-        records.push({
-          stuId: tmpArr[1],
-          tradeDate: tmpArr[0],
-          firmName: tmpArr[4],
-          transactionType: tmpArr[3],
-          cost: tmpArr[6],
-          balance: tmpArr[7],
-        });
-      });
-
-      return records;
-    }
-
-    /**
      * Get expense records with specific date quantum from website
      * @param {String} cookie - Cookie string with successful login status
      * @param {String} accountId - User's account ID
@@ -181,7 +196,17 @@ module.exports = app => {
         headers: { cookie },
       });
 
-      return data.data;
+      const records = [];
+
+      const brief = this.getBrief(data.data);
+      records.push(...this.recordParser(data.data));
+
+      for (let i = 2; i <= brief.totalPages; i++) {
+        const tmpRecords = await this.getDataByPageNum(cookie, startDate, endDate, i);
+        records.push(...tmpRecords);
+      }
+
+      return records;
     }
 
     /**
@@ -204,7 +229,9 @@ module.exports = app => {
         },
       });
 
-      return data.data;
+      const records = this.recordParser(data.data);
+
+      return records;
     }
 
   }
