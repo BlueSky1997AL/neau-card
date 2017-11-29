@@ -7,4 +7,5 @@ module.exports = app => {
 
   app.get('/basicInfo', 'data.getBasicInfo');
   app.get('/dailyRecords', 'data.getDailyExpRec');
+  app.get('/records', 'data.getRecords');
 };
