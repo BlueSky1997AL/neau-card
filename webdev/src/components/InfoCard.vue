@@ -8,6 +8,7 @@
         <div id="show-balance-btn" v-html="showBtn" @click="toggleDisplay()"></div>
       </div>
       <div id="update">
+        <spinner type="ios-small" size="17px"></spinner>
         <span id="update-time">更新时间：{{updateTime}}</span>
         <div id="update-btn" @click="update()">更新</div>
       </div>
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+import { Spinner } from 'vux'
+
 const showImg = '<svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="2212 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-23a8.009,8.009,0,0,0-8,8,8.009,8.009,0,0,0,8,8,8.008,8.008,0,0,0,8-8A8.009,8.009,0,0,0-967-3037Z" transform="translate(3204 6234)"/></svg>'
 const hideImg = '<svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="1488 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-12.171h0l5.656,5.656,2.829-2.828-5.657-5.657,5.657-5.656-2.829-2.829-5.656,5.657-5.657-5.657-2.829,2.829,5.657,5.656-5.657,5.657,2.829,2.828Z" transform="translate(2480 6234)"/></svg>'
 
@@ -46,7 +49,7 @@ export default {
       }
     }
   },
-  components: {},
+  components: { Spinner },
   data () {
     return {
       displayedBalance: '',
@@ -97,7 +100,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
   #info-card-component {
     position: relative;
     width: 100%;
@@ -185,5 +188,10 @@ export default {
     text-align: center;
     line-height: 16.5px;
     margin-left: 5px;
+  }
+
+  /* 将 style 标签设置为 scoped 属性时，可以将 css 样式限定于当前组件的作用域，这样还可以对所需要调用的vux组件样式进行修改 */
+  .vux-spinner-ios-small {
+    stroke: #fff;
   }
 </style>

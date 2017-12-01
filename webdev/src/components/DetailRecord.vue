@@ -74,7 +74,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dr-cells {
   height: 67px;
   border-bottom: 1px solid #DCDCDC;
