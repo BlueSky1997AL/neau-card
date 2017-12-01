@@ -8,7 +8,7 @@
         <div id="show-balance-btn" v-html="showBtn" @click="toggleDisplay()"></div>
       </div>
       <div id="update">
-        <spinner type="ios-small" size="17px"></spinner>
+        <spinner v-if="isUpdating" type="ios-small" size="17px"></spinner>
         <span id="update-time">更新时间：{{updateTime}}</span>
         <div id="update-btn" @click="update()">更新</div>
       </div>
@@ -41,6 +41,10 @@ export default {
     'show-info': {
       type: Boolean,
       default: true
+    },
+    'is-updating': {
+      type: Boolean,
+      default: false
     },
     update: {
       type: Function,

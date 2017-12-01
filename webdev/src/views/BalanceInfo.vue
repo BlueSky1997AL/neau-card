@@ -1,18 +1,19 @@
 <template>
   <div class="main-container">
-    <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData"></info-card>
+    <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating"></info-card>
     <div class="section-label">最近七天消费</div>
-    <line-chart :rec-data="recDataSample"></line-chart>
-    <detail-record class="dr-component"></detail-record>
+    <line-chart :rec-data="recData"></line-chart>
+    <detail-record class="dr-component" :records="records" :total-amount="totalAmount"></detail-record>
     <div id="jser-logo">
       <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
     </div>
 
+    <toast v-model="isUpdatingWarn" type="cancel" text="正在更新信息" width="8rem"></toast>
     <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
       <div id="dialog-container">
         <group title="东农校内 - 更新数据">
           <x-input type="text" title="学号" disabled placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
-          <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
+          <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
           <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
             <div slot="right" class="captcha-container" @click="reloadCaptcha">
               <spinner type="lines" id="captcha-loading-icon" v-if="captchaLoadingIcon"></spinner>
@@ -25,6 +26,7 @@
           <x-button :gradients="['#1D62F0', '#19D5FD']" type="primary" text="更 新" :disabled="submitBtnDisabled" :show-loading="submitBtnShowLoading" action-type="submit" class="btn" @click.native="submit"></x-button>
         </box>
 
+        <toast v-model="loginFailureWarn" type="cancel" position="top" :text="loginFailureMsg" width="11.5rem"></toast>
         <toast v-model="stuIdWarn" type="cancel" position="top" text="学号信息错误" width="8rem"></toast>
         <toast v-model="pswWarn" type="cancel" position="top" text="请输入密码" width="8rem"></toast>
         <toast v-model="captchaWarn" type="cancel" position="top" text="请输入验证码" width="8rem"></toast>
@@ -60,14 +62,14 @@ export default {
       stuId: 'A19150191',
       password: '131110',
       showStatus: true,
-      balance: '32.58',
-      updateTime: '今天18:00',
+      balance: 'N/A',
+      updateTime: 'N/A',
 
       showLoginBox: false,
 
-      recDataSample: {
-        date: ['07-09', '07-10', '07-11', '07-12', '07-13', '07-14', '07-15'],
-        cost: [0.00, 0.00, 20.08, 10.68, 32.36, 0.00, 0.00]
+      recData: {
+        date: [],
+        cost: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
       },
 
       dialogStyle: {
@@ -89,38 +91,83 @@ export default {
       submitBtnShowLoading: false,
       submitBtnDisabled: false,
 
-      captchaLoadingIcon: false
+      captchaLoadingIcon: false,
+
+      isUpdating: false,
+
+      records: [],
+      totalAmount: 'N/A',
+
+      isUpdatingWarn: false,
+
+      loginFailureWarn: false,
+      loginFailureMsg: ''
     }
   },
   methods: {
     async updateData () {
-      this.captchaImg = ''
-      this.showLoginBox = true
-      this.captchaLoadingIcon = true
-      const cookieData = await axios.get('/api/cookie')
-      this.cookie = cookieData.data
-      this.captchaLoading()
+      if (this.isUpdating) {
+        this.isUpdatingWarn = true
+      } else {
+        this.captchaImg = ''
+        this.showLoginBox = true
+        this.captchaLoadingIcon = true
+        const cookieData = await axios.get('/api/cookie')
+        this.cookie = cookieData.data
+        this.captchaLoading()
+      }
     },
     changeDisplayStatus (val) {
       this.showStatus = val
     },
     async submit () {
-      this.submitBtnShowLoading = true
-      this.submitBtnDisabled = true
       if (this.stuId && this.password && this.captcha) {
+        this.submitBtnShowLoading = true
+        this.submitBtnDisabled = true
         const loginResult = await axios.get(`/api/login?cookie=${this.cookie}&username=${this.stuId}&password=${this.password}&chkCode=${this.captcha}`)
         if (loginResult.data.status === 'success') {
+          this.captcha = ''
+          this.isUpdating = true
           this.submitBtnShowLoading = false
           this.submitBtnDisabled = false
           this.showLoginBox = false
           const basicInfo = await axios.get(`/api/basicInfo?cookie=${this.cookie}`)
+          this.balance = parseFloat(basicInfo.data.balance) + ''
           const dailyRecords = await axios.get(`/api/dailyRecords?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}`)
           const records = await axios.get(`/api/records?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}&startDate=20171101&endDate=20171201`)
-          const totalRecords = [...(dailyRecords.data), ...(records.data)]
-          console.log(basicInfo.data)
-          console.log(totalRecords)
+          this.totalAmount = records.data.totalCost + ''
+
+          const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
+          totalRecords.forEach((v, i) => {
+            this.records.push({
+              id: i,
+              seller: v.firmName,
+              date: v.tradeDate,
+              amount: parseFloat(v.cost)
+            })
+            const date = new Date(v.tradeDate)
+            const recordMonth = date.getMonth()
+            const recordDate = date.getDate()
+            const dateStr = `${recordMonth < 9 ? '0' + recordMonth + 1 : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
+            const index = this.recData.date.indexOf(dateStr)
+            if (index !== -1) {
+              this.recData.cost[index] += Math.abs(parseFloat(v.cost))
+            }
+          })
+          this.isUpdating = false
+          this.recData.cost = Object.assign([], this.recData.cost)
+
+          const updateAt = new Date()
+          const updateHours = updateAt.getHours()
+          const updateMinutes = updateAt.getMinutes()
+          this.updateTime = `今天${updateHours}:${updateMinutes < 10 ? '0' + updateMinutes : updateMinutes}`
         } else {
-          alert(loginResult.data.msg)
+          this.reloadCaptcha()
+          this.captcha = ''
+          this.submitBtnShowLoading = false
+          this.submitBtnDisabled = false
+          this.loginFailureWarn = true
+          this.loginFailureMsg = loginResult.data.msg
         }
       } else if (!this.stuId) {
         this.stuIdWarn = true
@@ -145,13 +192,33 @@ export default {
       const cookieData = await axios.get('/api/cookie')
       this.cookie = cookieData.data
       this.captchaLoading()
+    },
+    generateDateArray () {
+      const now = new Date()
+
+      const nowDate = now.getDate()
+      const nowMonth = now.getMonth()
+      const nowYear = now.getFullYear()
+
+      let calc = new Date(nowYear, nowMonth, nowDate - 6)
+
+      const dateArr = []
+      this.dateObjArr = []
+
+      for (let i = 0; i < 7; i++) {
+        this.dateObjArr.push(new Date(nowYear, nowMonth, nowDate - 6 + i))
+        const calcMonth = calc.getMonth()
+        const calcDate = calc.getDate()
+        dateArr.push(`${calcMonth < 9 ? '0' + calcMonth + 1 : calcMonth + 1}-${calcDate < 10 ? '0' + calcDate : calcDate}`)
+        calc = new Date(nowYear, nowMonth, nowDate - 5 + i)
+      }
+
+      this.recData.date = Object.assign([], dateArr)
     }
   },
   watch: {},
   created: function () {
-    setTimeout(() => {
-      this.balance = '93.67'
-    }, 5000)
+    this.generateDateArray()
   }
 }
 </script>

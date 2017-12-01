@@ -1,10 +1,10 @@
 <template>
   <div id="detail-record-component">
     <div class="dr-cells dr-label">
-      <span id="dr-label-title-text">{{month}}月消费账目</span>
+      <span id="dr-label-title-text">一月内消费账目</span>
       <span id="dr-label-total-text">共计消费：{{totalAmount}}元</span>
     </div>
-    <div v-for="item in detailRecordList" :key="item.id" class="dr-cells">
+    <div v-for="item in records" :key="item.id" class="dr-cells">
       <div class="dr-detail-left-content"><span class="dr-detail-seller">{{item.seller}}</span><span class="dr-detail-date">{{item.date}}</span></div>
       <span class="dr-detail-right-amount"><span class="dr-detail-right-amount-positive" v-if="item.amount > 0">+</span><span :class="(item.amount < 0) ? 'dr-detail-right-amount' : 'dr-detail-right-amount-positive'">{{item.amount}}</span> 元</span>
     </div>
@@ -15,11 +15,7 @@
 export default {
   name: 'detail-record',
   props: {
-    month: {
-      type: Number,
-      default: 7
-    },
-    detailRecordList: {
+    records: {
       type: Array,
       default: function () {
         return [
@@ -40,37 +36,15 @@ export default {
             seller: '支付宝充值',
             date: '2017-07-01 18:24',
             amount: +10.50
-          },
-          {
-            id: 3,
-            seller: '南区一食堂',
-            date: '2017-07-02 12:36',
-            amount: -20.35
-          },
-          {
-            id: 4,
-            seller: '棘圆',
-            date: '2017-07-02 14:13',
-            amount: -5
-          },
-          {
-            id: 5,
-            seller: '支付宝充值',
-            date: '2017-07-02 15:21',
-            amount: +50
           }
         ]
       }
+    },
+    'total-amount': {
+      type: String,
+      default: 'N/A'
     }
-  },
-  data () {
-    return {
-      // temporary param
-      totalAmount: 598.02
-    }
-  },
-  watch: {},
-  mounted: function () {}
+  }
 }
 </script>
 

@@ -206,7 +206,10 @@ module.exports = app => {
         records.push(...tmpRecords);
       }
 
-      return records;
+      return {
+        totalCost: brief.totalCost,
+        records,
+      };
     }
 
     /**

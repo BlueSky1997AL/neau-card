@@ -27,11 +27,15 @@ export default {
     }
   },
   watch: {
-    recData () {
-      this.chart.setOption({
-        xAxis: [ { data: this.recData.date } ],
-        series: [ { data: this.recData.cost } ]
-      })
+    recData: {
+      // Needed to be optimized (params links)
+      handler (newValue, oldValue) {
+        this.chart.setOption({
+          xAxis: [ { data: newValue.date } ],
+          series: [ { data: newValue.cost } ]
+        })
+      },
+      deep: true
     }
   },
   mounted: function () {
