@@ -132,10 +132,21 @@ export default {
           this.submitBtnDisabled = false
           this.showLoginBox = false
           const basicInfo = await axios.get(`/api/basicInfo?cookie=${this.cookie}`)
+
+          localStorage.basicInfo = JSON.stringify(basicInfo.data)
+
           this.balance = parseFloat(basicInfo.data.balance) + ''
           const dailyRecords = await axios.get(`/api/dailyRecords?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}`)
-          const records = await axios.get(`/api/records?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}&startDate=20171101&endDate=20171201`)
+
+          const nowDate = new Date()
+          const endDateObj = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() - 1)
+          const endDate = `${endDateObj.getFullYear()}${endDateObj.getMonth() < 9 ? '0' + (endDateObj.getMonth() + 1) : endDateObj.getMonth() + 1}${endDateObj.getDate() < 9 ? '0' + endDateObj.getDate() : endDateObj.getDate()}`
+          const startDateObj = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() - 32)
+          const startDate = `${startDateObj.getFullYear()}${startDateObj.getMonth() < 9 ? '0' + (startDateObj.getMonth() + 1) : startDateObj.getMonth() + 1}${startDateObj.getDate() < 9 ? '0' + startDateObj.getDate() : startDateObj.getDate()}`
+
+          const records = await axios.get(`/api/records?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}&startDate=${startDate}&endDate=${endDate}`)
           this.totalAmount = records.data.totalCost + ''
+          localStorage.totalAmount = this.totalAmount
 
           const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
           totalRecords.forEach((v, i) => {
@@ -154,6 +165,12 @@ export default {
               this.recData.cost[index] += Math.abs(parseFloat(v.cost))
             }
           })
+
+          localStorage.records = JSON.stringify(totalRecords)
+
+          this.recData.cost.forEach((v, i) => {
+            this.recData.cost[i] = v.toFixed(2)
+          })
           this.isUpdating = false
           this.recData.cost = Object.assign([], this.recData.cost)
 
@@ -161,6 +178,8 @@ export default {
           const updateHours = updateAt.getHours()
           const updateMinutes = updateAt.getMinutes()
           this.updateTime = `今天${updateHours}:${updateMinutes < 10 ? '0' + updateMinutes : updateMinutes}`
+
+          localStorage.updateAt = updateAt.toISOString()
         } else {
           this.reloadCaptcha()
           this.captcha = ''
@@ -176,6 +195,9 @@ export default {
       } else if (!this.captcha) {
         this.captchaWarn = true
       }
+    },
+    renderLineChart () {
+
     },
     captchaLoading () {
       this.captchaLoadingIcon = true
@@ -216,9 +238,75 @@ export default {
       this.recData.date = Object.assign([], dateArr)
     }
   },
-  watch: {},
-  created: function () {
+  watch: {
+    showStatus () {
+      localStorage.showStatus = this.showStatus
+    }
+  },
+  mounted () {
     this.generateDateArray()
+    if (localStorage.showStatus) {
+      if (localStorage.showStatus === 'false') {
+        this.showStatus = false
+      }
+    }
+    if (localStorage.basicInfo) {
+      const basicInfo = JSON.parse(localStorage.basicInfo)
+      this.balance = parseFloat(basicInfo.balance) + ''
+    }
+    if (localStorage.updateAt) {
+      const updateAt = new Date(localStorage.updateAt)
+      const updateDate = new Date(updateAt.getFullYear(), updateAt.getMonth(), updateAt.getDate())
+      const now = new Date()
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1)
+      const theDayBeforeYesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2)
+      if (today - updateDate === 0) {
+        const hours = updateAt.getHours()
+        const minutes = updateAt.getMinutes()
+        this.updateTime = `今天${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+      } else if (yesterday - updateDate === 0) {
+        const hours = updateAt.getHours()
+        const minutes = updateAt.getMinutes()
+        this.updateTime = `昨天${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+      } else if (theDayBeforeYesterday - updateDate === 0) {
+        const hours = updateAt.getHours()
+        const minutes = updateAt.getMinutes()
+        this.updateTime = `前天${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+      } else {
+        const hours = updateAt.getHours()
+        const minutes = updateAt.getMinutes()
+        this.updateTime = `${updateAt.getFullYear()}/${updateAt.getMonth() + 1}/${updateAt.getDate()} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+      }
+    }
+    if (localStorage.records) {
+      const records = JSON.parse(localStorage.records)
+      records.forEach((v, i) => {
+        this.records.push({
+          id: i,
+          seller: v.firmName,
+          date: v.tradeDate,
+          amount: parseFloat(v.cost)
+        })
+        const date = new Date(v.tradeDate)
+        const recordMonth = date.getMonth()
+        const recordDate = date.getDate()
+        const dateStr = `${recordMonth < 9 ? '0' + recordMonth + 1 : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
+        const index = this.recData.date.indexOf(dateStr)
+        if (index !== -1) {
+          this.recData.cost[index] += Math.abs(parseFloat(v.cost))
+        }
+      })
+      this.recData.cost.forEach((v, i) => {
+        this.recData.cost[i] = v.toFixed(2)
+      })
+    }
+    if (localStorage.totalAmount) {
+      this.totalAmount = localStorage.totalAmount
+    }
+    if (!localStorage.basicInfo) {
+      this.updateData()
+    }
   }
 }
 </script>
