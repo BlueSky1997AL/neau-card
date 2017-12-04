@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = app => {
-  app.get('/cookie', 'login.getCookie');
-  app.get('/captcha', 'login.getCaptcha');
-  app.get('/login', 'login.login');
+  app.get('/api/cookie', 'login.getCookie');
+  app.get('/api/captcha', 'login.getCaptcha');
+  app.get('/api/login', 'login.login');
 
-  app.get('/basicInfo', 'data.getBasicInfo');
-  app.get('/dailyRecords', 'data.getDailyExpRec');
-  app.get('/records', 'data.getRecords');
+  app.get('/api/basicInfo', 'data.getBasicInfo');
+  app.get('/api/dailyRecords', 'data.getDailyExpRec');
+  app.get('/api/records', 'data.getRecords');
 };

@@ -31,10 +31,7 @@ module.exports = {
       // 开发模式跨域解决方案
       '/api': {
         target: 'http://localhost:7001',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        changeOrigin: true
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

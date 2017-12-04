@@ -59,8 +59,8 @@ export default {
   },
   data () {
     return {
-      stuId: 'A19150191',
-      password: '131110',
+      stuId: '',
+      password: '',
       showStatus: true,
       balance: 'N/A',
       updateTime: 'N/A',
@@ -131,6 +131,9 @@ export default {
           this.submitBtnShowLoading = false
           this.submitBtnDisabled = false
           this.showLoginBox = false
+
+          localStorage.psw = this.password
+
           const basicInfo = await axios.get(`/api/basicInfo?cookie=${this.cookie}`)
 
           localStorage.basicInfo = JSON.stringify(basicInfo.data)
@@ -149,6 +152,7 @@ export default {
           localStorage.totalAmount = this.totalAmount
 
           const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
+          this.recData.cost = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
           totalRecords.forEach((v, i) => {
             this.records.push({
               id: i,
@@ -252,7 +256,11 @@ export default {
     }
     if (localStorage.basicInfo) {
       const basicInfo = JSON.parse(localStorage.basicInfo)
+      this.stuId = basicInfo.stuId
       this.balance = parseFloat(basicInfo.balance) + ''
+    }
+    if (localStorage.psw) {
+      this.password = localStorage.psw
     }
     if (localStorage.updateAt) {
       const updateAt = new Date(localStorage.updateAt)

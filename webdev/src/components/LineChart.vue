@@ -32,14 +32,14 @@ export default {
       // Needed to be optimized (params links)
       handler (newValue, oldValue) {
         this.chart.setOption({ xAxis: [ { data: newValue.date } ] })
-        // if (!this.isLoading) {
-        //   console.log('not loading')
-        //   this.chart.setOption({ series: [ { data: newValue.cost } ] })
-        // } else {
-        //   setTimeout(() => {
-        //     this.chart.setOption({ series: [ { data: newValue.cost } ] })
-        //   }, 5000)
-        // }
+        if (!this.isLoading) {
+          console.log('not loading')
+          this.chart.setOption({ series: [ { data: newValue.cost } ] })
+        } else {
+          setTimeout(() => {
+            this.chart.setOption({ series: [ { data: newValue.cost } ] })
+          }, 1000)
+        }
       },
       deep: true
     }
@@ -122,7 +122,7 @@ export default {
         }
       ],
       animationDurationUpdate: 1000,
-      animationDuration: 5000
+      animationDuration: 1000
     }
 
     chart.setOption(option)
@@ -131,7 +131,7 @@ export default {
     setTimeout(() => {
       chart.setOption({series: [ { data: this.recData.cost } ]})
       this.isLoading = false
-    }, 5000)
+    }, 1000)
   }
 }
 </script>

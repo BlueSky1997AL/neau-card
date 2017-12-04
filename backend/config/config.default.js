@@ -20,5 +20,9 @@ module.exports = appInfo => {
     timeout: [ '30s', '30s' ],
   };
 
+  config.static = {
+    prefix: '/',
+  };
+
   return config;
 };
