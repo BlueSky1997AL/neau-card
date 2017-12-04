@@ -12,7 +12,7 @@
     <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
       <div id="dialog-container">
         <group title="东农校内 - 更新数据">
-          <x-input type="text" title="学号" disabled placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
+          <x-input type="text" title="学号" :disabled="false" placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
           <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
           <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
             <div slot="right" class="captcha-container" @click="reloadCaptcha">

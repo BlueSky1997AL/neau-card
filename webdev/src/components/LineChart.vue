@@ -23,17 +23,23 @@ export default {
   },
   data () {
     return {
-      chart: ''
+      chart: '',
+      isLoading: false
     }
   },
   watch: {
     recData: {
       // Needed to be optimized (params links)
       handler (newValue, oldValue) {
-        this.chart.setOption({
-          xAxis: [ { data: newValue.date } ],
-          series: [ { data: newValue.cost } ]
-        })
+        this.chart.setOption({ xAxis: [ { data: newValue.date } ] })
+        // if (!this.isLoading) {
+        //   console.log('not loading')
+        //   this.chart.setOption({ series: [ { data: newValue.cost } ] })
+        // } else {
+        //   setTimeout(() => {
+        //     this.chart.setOption({ series: [ { data: newValue.cost } ] })
+        //   }, 5000)
+        // }
       },
       deep: true
     }
@@ -116,14 +122,16 @@ export default {
         }
       ],
       animationDurationUpdate: 1000,
-      animationDuration: 1000
+      animationDuration: 5000
     }
 
     chart.setOption(option)
 
+    this.isLoading = true
     setTimeout(() => {
       chart.setOption({series: [ { data: this.recData.cost } ]})
-    }, 400)
+      this.isLoading = false
+    }, 5000)
   }
 }
 </script>
