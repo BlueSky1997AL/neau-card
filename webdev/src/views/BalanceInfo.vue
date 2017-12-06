@@ -152,7 +152,18 @@ export default {
           localStorage.totalAmount = this.totalAmount
 
           const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
+
+          // sort (dev)
+          totalRecords.sort(function (rec1, rec2) {
+            const rec1Date = new Date(rec1.tradeDate)
+            const rec2Date = new Date(rec2.tradeDate)
+            if (rec1Date - rec2Date > 0) return -1
+            if (rec1Date - rec2Date < 0) return 1
+            else return 0
+          })
+
           this.recData.cost = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+          this.records = []
           totalRecords.forEach((v, i) => {
             this.records.push({
               id: i,

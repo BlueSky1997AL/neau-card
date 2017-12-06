@@ -33,7 +33,6 @@ export default {
       handler (newValue, oldValue) {
         this.chart.setOption({ xAxis: [ { data: newValue.date } ] })
         if (!this.isLoading) {
-          console.log('not loading')
           this.chart.setOption({ series: [ { data: newValue.cost } ] })
         } else {
           setTimeout(() => {
