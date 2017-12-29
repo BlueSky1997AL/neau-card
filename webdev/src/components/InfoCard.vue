@@ -10,7 +10,9 @@
       <div id="update">
         <spinner v-if="isUpdating" type="ios-small" size="17px"></spinner>
         <span id="update-time">更新时间：{{updateTime}}</span>
-        <div id="update-btn" @click="update()">更新</div>
+        <div id="update-btn-container" @click="update()">
+          <span id="update-btn-text">更新</span>
+        </div>
       </div>
     </div>
     <div id="main-container-shadow"></div>
@@ -182,7 +184,7 @@ export default {
     display: inline-block;
   }
 
-  #update-btn {
+  #update-btn-container {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
     width: 40px;
@@ -192,6 +194,7 @@ export default {
     text-align: center;
     line-height: 16.5px;
     margin-left: 5px;
+    
   }
 
   /* 将 style 标签设置为 scoped 属性时，可以将 css 样式限定于当前组件的作用域，这样还可以对所需要调用的vux组件样式进行修改 */

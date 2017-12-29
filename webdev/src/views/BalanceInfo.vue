@@ -139,6 +139,10 @@ export default {
           localStorage.basicInfo = JSON.stringify(basicInfo.data)
 
           this.balance = parseFloat(basicInfo.data.balance) + ''
+
+          // if (localStorage.records) {
+          //   // dev code block
+          // } else {
           const dailyRecords = await axios.get(`/api/dailyRecords?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}`)
 
           const nowDate = new Date()
@@ -153,7 +157,7 @@ export default {
 
           const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
 
-          // sort (dev)
+          // sort
           totalRecords.sort(function (rec1, rec2) {
             const rec1Date = new Date(rec1.tradeDate)
             const rec2Date = new Date(rec2.tradeDate)
@@ -195,6 +199,7 @@ export default {
           this.updateTime = `今天${updateHours}:${updateMinutes < 10 ? '0' + updateMinutes : updateMinutes}`
 
           localStorage.updateAt = updateAt.toISOString()
+          // }
         } else {
           this.reloadCaptcha()
           this.captcha = ''
@@ -334,6 +339,7 @@ export default {
 /* Dev Style Sheet Start*/
 * {
   font-family: 苹方;
+  user-select: none;
 }
 /* Dev Style Sheet End*/
 
