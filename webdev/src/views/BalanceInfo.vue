@@ -16,8 +16,8 @@
           <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
           <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
             <div slot="right" class="captcha-container" @click="reloadCaptcha">
-              <spinner type="lines" id="captcha-loading-icon" v-if="captchaLoadingIcon"></spinner>
-              <img id="captcha" :src="captchaImg">
+              <spinner type="lines" id="captcha-loading-icon" v-if="captchaIsLoading"></spinner>
+              <img id="captcha" :src="captchaImg" v-show="!captchaIsLoading">
             </div>
           </x-input>
         </group>
@@ -91,7 +91,7 @@ export default {
       submitBtnShowLoading: false,
       submitBtnDisabled: false,
 
-      captchaLoadingIcon: false,
+      captchaIsLoading: false,
 
       isUpdating: false,
 
@@ -111,7 +111,7 @@ export default {
       } else {
         this.captchaImg = ''
         this.showLoginBox = true
-        this.captchaLoadingIcon = true
+        this.captchaIsLoading = true
         const cookieData = await axios.get('/api/cookie')
         this.cookie = cookieData.data
         this.captchaLoading()
@@ -220,17 +220,17 @@ export default {
 
     },
     captchaLoading () {
-      this.captchaLoadingIcon = true
+      this.captchaIsLoading = true
       const img = new Image()
       img.src = `/api/captcha?cookie=${this.cookie}`
       img.onload = () => {
         this.captchaImg = img.src
-        this.captchaLoadingIcon = false
+        this.captchaIsLoading = false
       }
     },
     async reloadCaptcha () {
       this.captchaImg = ''
-      this.captchaLoadingIcon = true
+      this.captchaIsLoading = true
       const cookieData = await axios.get('/api/cookie')
       this.cookie = cookieData.data
       this.captchaLoading()

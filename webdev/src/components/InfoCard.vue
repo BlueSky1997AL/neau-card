@@ -10,9 +10,7 @@
       <div id="update">
         <spinner v-if="isUpdating" type="ios-small" size="17px"></spinner>
         <span id="update-time">更新时间：{{updateTime}}</span>
-        <div id="update-btn-container" @click="update()">
-          <span id="update-btn-text">更新</span>
-        </div>
+        <div id="update-btn" @click="update()">更新</div>
       </div>
     </div>
     <div id="main-container-shadow"></div>
@@ -22,8 +20,8 @@
 <script>
 import { Spinner } from 'vux'
 
-const showImg = '<svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="2212 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-23a8.009,8.009,0,0,0-8,8,8.009,8.009,0,0,0,8,8,8.008,8.008,0,0,0,8-8A8.009,8.009,0,0,0-967-3037Z" transform="translate(3204 6234)"/></svg>'
-const hideImg = '<svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="1488 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-12.171h0l5.656,5.656,2.829-2.828-5.657-5.657,5.657-5.656-2.829-2.829-5.656,5.657-5.657-5.657-2.829,2.829,5.657,5.656-5.657,5.657,2.829,2.828Z" transform="translate(2480 6234)"/></svg>'
+const showImg = '<svg class="show-status-svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="2212 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-23a8.009,8.009,0,0,0-8,8,8.009,8.009,0,0,0,8,8,8.008,8.008,0,0,0,8-8A8.009,8.009,0,0,0-967-3037Z" transform="translate(3204 6234)"/></svg>'
+const hideImg = '<svg class="show-status-svg-btn" xmlns="http://www.w3.org/2000/svg" viewBox="1488 3190 50 30"><defs><style>.a{fill:#fff;opacity:0.5;}</style></defs><path class="a" d="M-967-3014a28.8,28.8,0,0,1-25-15,28.8,28.8,0,0,1,25-15,28.8,28.8,0,0,1,25,15A28.8,28.8,0,0,1-967-3014Zm0-12.171h0l5.656,5.656,2.829-2.828-5.657-5.657,5.657-5.656-2.829-2.829-5.656,5.657-5.657-5.657-2.829,2.829,5.657,5.656-5.657,5.657,2.829,2.828Z" transform="translate(2480 6234)"/></svg>'
 
 export default {
   name: 'info-card',
@@ -106,6 +104,14 @@ export default {
   }
 }
 </script>
+
+<style>
+  /* 寻找更优雅的解决方式 - 参考 slot */
+  .show-status-svg-btn {
+    vertical-align: top;
+  }
+</style>
+
 <style scoped>
   #info-card-component {
     position: relative;
@@ -172,10 +178,6 @@ export default {
     margin-left: 10px;
   }
 
-  .svg-btn {
-    vertical-align: top;
-  }
-
   #update {
     font-size: 12px;
     position: absolute;
@@ -184,7 +186,7 @@ export default {
     display: inline-block;
   }
 
-  #update-btn-container {
+  #update-btn {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
     width: 40px;
@@ -194,7 +196,7 @@ export default {
     text-align: center;
     line-height: 16.5px;
     margin-left: 5px;
-    
+    vertical-align: middle;
   }
 
   /* 将 style 标签设置为 scoped 属性时，可以将 css 样式限定于当前组件的作用域，这样还可以对所需要调用的vux组件样式进行修改 */
