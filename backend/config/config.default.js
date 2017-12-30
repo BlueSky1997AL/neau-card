@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.curlOpts = {
     // Enable proxy when needed
     enableProxy: true,
-    proxy: 'http://cyf.feit.me:6000',
+    proxy: 'http://neauproxy.feit.me:6000',
     timeout: [ '30s', '30s' ],
   };
 
