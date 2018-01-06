@@ -178,7 +178,7 @@ export default {
             const date = new Date(v.tradeDate)
             const recordMonth = date.getMonth()
             const recordDate = date.getDate()
-            const dateStr = `${recordMonth < 9 ? '0' + recordMonth + 1 : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
+            const dateStr = `${recordMonth < 9 ? '0' + (recordMonth + 1) : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
             const index = this.recData.date.indexOf(dateStr)
             if (index !== -1) {
               this.recData.cost[index] += Math.abs(parseFloat(v.cost))
@@ -251,7 +251,7 @@ export default {
         this.dateObjArr.push(new Date(nowYear, nowMonth, nowDate - 6 + i))
         const calcMonth = calc.getMonth()
         const calcDate = calc.getDate()
-        dateArr.push(`${calcMonth < 9 ? '0' + calcMonth + 1 : calcMonth + 1}-${calcDate < 10 ? '0' + calcDate : calcDate}`)
+        dateArr.push(`${calcMonth < 9 ? '0' + (calcMonth + 1) : calcMonth + 1}-${calcDate < 10 ? '0' + calcDate : calcDate}`)
         calc = new Date(nowYear, nowMonth, nowDate - 5 + i)
       }
 
@@ -315,7 +315,7 @@ export default {
         const date = new Date(v.tradeDate)
         const recordMonth = date.getMonth()
         const recordDate = date.getDate()
-        const dateStr = `${recordMonth < 9 ? '0' + recordMonth + 1 : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
+        const dateStr = `${recordMonth < 9 ? '0' + (recordMonth + 1) : recordMonth + 1}-${recordDate < 10 ? '0' + recordDate : recordDate}`
         const index = this.recData.date.indexOf(dateStr)
         if (index !== -1) {
           this.recData.cost[index] += Math.abs(parseFloat(v.cost))
