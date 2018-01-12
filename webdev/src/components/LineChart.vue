@@ -31,7 +31,8 @@ export default {
     recData: {
       // Needed to be optimized (params links)
       handler (newValue, oldValue) {
-        this.chart.setOption({ xAxis: [ { data: newValue.date } ] })
+        // this.chart.setOption({ xAxis: [ { data: newValue.date } ] })
+        this.recData.date = newValue.date
         if (!this.isLoading) {
           this.chart.setOption({ series: [ { data: newValue.cost } ] })
         } else {
@@ -47,84 +48,85 @@ export default {
     const chart = eChartsModule.echarts.init(document.getElementById('main'))
     this.chart = chart
 
-    const option = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'line',
-          lineStyle: {
-            color: '#0097ff'
+    setTimeout(() => {
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'line',
+            lineStyle: {
+              color: '#0097ff'
+            }
           }
-        }
-      },
-      grid: {
-        top: '20%',
-        left: '0%',
-        right: '0%',
-        bottom: '20%'
-      },
-      xAxis: [
-        {
-          type: 'category',
-          position: 'bottom',
-          offset: 5,
-          boundaryGap: true,
-          data: this.recData.date,
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: {
-            color: '#AAA',
-            fontSize: 10
-          }
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value',
-          show: false
-        }
-      ],
-      series: [
-        {
-          name: '当日消费金额',
-          type: 'line',
-          smooth: true,
-          itemStyle: {
-            normal: {
-              color: '#0097ff',
-              borderWidth: 4
-            }
-          },
-          lineStyle: {
-            normal: {
-              type: 'solid',
-              color: '#0097FF'
-            }
-          },
-          animationEasing: 'quarticOut',
-          animationEasingUpdate: 'quarticOut',
-          areaStyle: {
-            normal: {
-              color: '#0097FF',
-              opacity: 0.3
-            }
-          },
-          data: [0, 0, 0, 0, 0, 0, 0],
-          label: {
-            normal: {
-              show: true,
-              color: '#0097FF',
-              position: 'top',
+        },
+        grid: {
+          top: '20%',
+          left: '0%',
+          right: '0%',
+          bottom: '20%'
+        },
+        xAxis: [
+          {
+            type: 'category',
+            position: 'bottom',
+            offset: 5,
+            boundaryGap: true,
+            data: this.recData.date,
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: {
+              color: '#AAA',
               fontSize: 10
             }
           }
-        }
-      ],
-      animationDurationUpdate: 1000,
-      animationDuration: 1000
-    }
-
-    chart.setOption(option)
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            show: false
+          }
+        ],
+        series: [
+          {
+            name: '当日消费金额',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+              normal: {
+                color: '#0097ff',
+                borderWidth: 4
+              }
+            },
+            lineStyle: {
+              normal: {
+                type: 'solid',
+                color: '#0097FF'
+              }
+            },
+            animationEasing: 'quarticOut',
+            animationEasingUpdate: 'quarticOut',
+            areaStyle: {
+              normal: {
+                color: '#0097FF',
+                opacity: 0.3
+              }
+            },
+            data: [0, 0, 0, 0, 0, 0, 0],
+            label: {
+              normal: {
+                show: true,
+                color: '#0097FF',
+                position: 'top',
+                fontSize: 10
+              }
+            }
+          }
+        ],
+        animationDurationUpdate: 1000,
+        animationDuration: 1000
+      }
+      chart.setOption(option)
+    }, 1)
 
     this.isLoading = true
     setTimeout(() => {
