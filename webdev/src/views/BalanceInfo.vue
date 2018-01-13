@@ -256,6 +256,14 @@ export default {
       }
 
       this.recData.date = Object.assign([], dateArr)
+    },
+
+    async getUsrInfo (token) {
+      const usrInfo = await axios.get(`/api/usrInfo?token=${token}`)
+
+      this.stuId = usrInfo.data.stuId
+      // 设置用户密码
+      // this.password = user.data.password
     }
   },
   watch: {
@@ -264,6 +272,10 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.accountToken) {
+      this.getUsrInfo(this.$route.query.accountToken)
+    }
+
     this.generateDateArray()
     if (localStorage.showStatus) {
       if (localStorage.showStatus === 'false') {

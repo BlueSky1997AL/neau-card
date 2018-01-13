@@ -83,6 +83,19 @@ module.exports = app => {
       const $ = cheerio.load(data.data);
       return { status: 'failure', msg: $('.biaotou').text() };
     }
+
+    /**
+     * 根据 token 获取用户信息请求转发
+     * @param {String} token - 需要查询信息的token
+     * @return {Object} 查询结果
+     */
+    async getUsrInfo(token) {
+      const info = await this.ctx.curl(`https://jwc.xiaonei.io/student/get?aid=${token}`, {
+        method: 'GET',
+        dataType: 'json',
+      });
+      return info.data;
+    }
   }
   return LoginActions;
 };

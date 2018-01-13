@@ -24,6 +24,14 @@ module.exports = app => {
       const result = await ctx.service.loginActions.login(username, password, chkCode, cookie);
       ctx.body = result;
     }
+
+    async getUsrInfo() {
+      const ctx = this.ctx;
+      const { token } = ctx.query;
+
+      const result = await ctx.service.loginActions.getUsrInfo(token);
+      ctx.body = result;
+    }
   }
   return LoginController;
 };
