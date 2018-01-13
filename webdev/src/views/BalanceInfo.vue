@@ -262,8 +262,14 @@ export default {
       const usrInfo = await axios.get(`/api/usrInfo?token=${token}`)
 
       this.stuId = usrInfo.data.stuId
-      // 设置用户密码
-      // this.password = user.data.password
+      const IDCardNo = usrInfo.data.IDCardNo
+      let psw
+      if (IDCardNo.substr(-1) === 'x' || IDCardNo.substr(-1) === 'X') {
+        psw = IDCardNo.substr(-7, 6)
+      } else {
+        psw = IDCardNo.substr(-6)
+      }
+      this.password = psw
     }
   },
   watch: {
