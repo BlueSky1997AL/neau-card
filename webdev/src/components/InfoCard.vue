@@ -2,7 +2,7 @@
   <div id="info-card-component">
     <div id="main-container">
       <span id="stuid-label">东北农业大学学生卡 {{stuId}}</span>
-      <img src="../assets/neau_logo.svg" alt="neau_logo" id="logo">
+      <img src="https://alsu-storage.b0.upaiyun.com/neau-card/static/img/neau_logo.svg" alt="neau_logo" id="logo">
       <div id="balance-container">
         <span id="balance">余额：{{displayedBalance}}</span>
         <div id="show-balance-btn" v-html="showBtn" @click="toggleDisplay()"></div>
