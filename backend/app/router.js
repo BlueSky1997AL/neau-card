@@ -10,4 +10,6 @@ module.exports = app => {
   app.get('/api/records', 'data.getRecords');
 
   app.get('/api/usrInfo', 'login.getUsrInfo');
+
+  app.get('/api/widget/info', 'widget.getWidgetInfo');
 };

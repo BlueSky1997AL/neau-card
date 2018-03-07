@@ -90,9 +90,12 @@ module.exports = app => {
      * @return {Object} 查询结果
      */
     async getUsrInfo(token) {
-      const info = await this.ctx.curl(`https://jwc.xiaonei.io/student/get?aid=${token}&needIdCard=1`, {
+      const info = await this.ctx.curl('https://jwc.xiaonei.io/student/get', {
         method: 'GET',
         dataType: 'json',
+        headers: {
+          authorization: 'aid ' + token,
+        },
       });
       return info.data;
     }

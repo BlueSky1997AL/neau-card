@@ -6,6 +6,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "egg": "^1.12.0",
+    "egg-mongoose": "^2.2.0",
     "egg-scripts": "^2.5.0"
   },
   "devDependencies": {

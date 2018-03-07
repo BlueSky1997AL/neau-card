@@ -24,5 +24,12 @@ module.exports = appInfo => {
     prefix: '/',
   };
 
+  config.mongoose = {
+    client: {
+      url: 'mongodb://127.0.0.1/neau_card',
+      options: {},
+    },
+  };
+
   return config;
 };

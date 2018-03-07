@@ -95,12 +95,18 @@ module.exports = app => {
       });
       const balances = dataArr[dataArr.length - 5].split(/\（|\）|\(|\)/).filter(e => this.isEmpty(e));
 
-      return {
+      const result = {
         accountId: dataArr[3],
         stuId: dataArr[8],
         balance: balances[0],
         transBalance: balances[2],
       };
+
+      this.ctx.model.User.update({ accountId: result.accountId }, result, { upsert: true, multi: true }, (err, raw) => {
+        console.log(err || raw);
+      });
+
+      return result;
     }
 
     /**
@@ -138,6 +144,20 @@ module.exports = app => {
       });
 
       // database
+      records.forEach(e => {
+        this.ctx.model.Record.update(
+          {
+            stuId: e.stuId,
+            tradeDate: e.tradeDate,
+            balance: e.balance,
+          },
+          e,
+          { upsert: true, multi: true },
+          (err, raw) => {
+            console.log(err || raw);
+          }
+        );
+      });
 
       return records;
     }
@@ -205,6 +225,22 @@ module.exports = app => {
         const tmpRecords = await this.getDataByPageNum(cookie, startDate, endDate, i);
         records.push(...tmpRecords);
       }
+
+      // Database
+      records.forEach(e => {
+        this.ctx.model.Record.update(
+          {
+            stuId: e.stuId,
+            tradeDate: e.tradeDate,
+            balance: e.balance,
+          },
+          e,
+          { upsert: true, multi: true },
+          (err, raw) => {
+            console.log(err || raw);
+          }
+        );
+      });
 
       return {
         totalCost: brief.totalCost,
