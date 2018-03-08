@@ -163,14 +163,14 @@ module.exports = app => {
     }
 
     /**
-     * Get expense records with specific date quantum from website
-     * @param {String} cookie - Cookie string with successful login status
-     * @param {String} accountId - User's account ID
-     * @param {String} startDate - Query start date
-     * @param {String} endDate - Query end date
-     * @return {Array} Expense records array
+     * 获取历史流水信息
+     * @param {String} cookie - 用户登陆成功的 cookie
+     * @param {String} accountId - 用户在校园卡系统中的ID
+     * @param {String} startDate - 查询开始日期
+     * @param {String} endDate - 查询终止日期
+     * @return {Array} 流水信息数组
      */
-    async getRecords(cookie, accountId, startDate, endDate) {
+    async dataFetcher(cookie, accountId, startDate, endDate) {
       // get continue string
       const data0 = await this.request('accounthisTrjn.action', {
         method: 'GET',
@@ -246,6 +246,79 @@ module.exports = app => {
         totalCost: brief.totalCost,
         records,
       };
+    }
+
+    /**
+     * Get expense records with specific date quantum from website
+     * @param {String} cookie - Cookie string with successful login status
+     * @param {String} accountId - User's account ID
+     * @param {String} startDate - Query start date
+     * @param {String} endDate - Query end date
+     * @return {Array} Expense records array
+     */
+    async getRecords(cookie, accountId, startDate, endDate) {
+      const ctx = this.ctx;
+      let data = [];
+      let totalCost = '';
+      // 数据库查询指定查询范围内的数据信息
+      const _startDate = new Date([ startDate.slice(0, 4), startDate.slice(4, 6), startDate.slice(6, 8) ].join('-'));
+      const _endDate = new Date([ endDate.slice(0, 4), endDate.slice(4, 6), endDate.slice(6, 8) ].join('-'));
+      const usrInfo = await ctx.model.User.findOne({ accountId });
+      if (usrInfo) {
+        const result = await (ctx.model.Record.find({
+          stuId: usrInfo.stuId,
+          tradeDate: {
+            $gte: _startDate,
+            $lt: _endDate,
+          },
+        }).sort({ updatedAt: 1 }));
+        if (result.length) {
+          const _newStartDate = result[0].updatedAt;
+          // 查询并存入数据库
+          // 日期格式化
+          const newStartDate = `${_newStartDate.getFullYear()}${_newStartDate.getMonth() < 9 ? '0' + (_newStartDate.getMonth() + 1) : _newStartDate.getMonth() + 1}${_newStartDate.getDate() < 9 ? '0' + _newStartDate.getDate() : _newStartDate.getDate()}`;
+          console.log('新的查询时间:');
+          console.log(newStartDate);
+          result.forEach(e => {
+            e.tradeDate = e.tradeDate.toLocalDateString();
+          });
+          data.push(...result);
+          const tmpData = (await this.dataFetcher(cookie, accountId, newStartDate, endDate)).records;
+          data.push(...tmpData);
+          data.forEach(e => {
+            totalCost -= e.cost;
+          });
+          console.log('经过了数据库查询操作, 操作结果:');
+          console.log('经过数据库获取到的信息:');
+          console.log(result);
+          console.log('经过爬虫获取到的信息:');
+          console.log(tmpData);
+        } else {
+          const dbData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
+          data = dbData.records;
+          totalCost = dbData.totalCost;
+          console.log('经过了全新查询操作, 操作结果:');
+          console.log({
+            totalCost,
+            records: data,
+          });
+        }
+      } else {
+        const dbData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
+        data = dbData.records;
+        totalCost = dbData.totalCost;
+        console.log('经过了全新查询操作, 操作结果:');
+        console.log({
+          totalCost,
+          records: data,
+        });
+      }
+
+      return {
+        totalCost,
+        records: data,
+      };
+
     }
 
     /**
