@@ -10,6 +10,7 @@ module.exports = app => {
       stuId: { type: String },
       balance: { type: String },
       transBalance: { type: String },
+      latestUpdateAt: { type: Date },
     },
     {
       timestamps: true,

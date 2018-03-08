@@ -5,7 +5,7 @@
       <span id="dr-label-total-text">共计消费：{{totalAmount}}元</span>
     </div>
     <div v-for="item in records" :key="item.id" class="dr-cells">
-      <div class="dr-detail-left-content"><span class="dr-detail-seller">{{item.seller}}</span><span class="dr-detail-date">{{item.date}}</span></div>
+      <div class="dr-detail-left-content"><span class="dr-detail-seller">{{item.seller}}</span><span class="dr-detail-date">{{normalizedDate(item.date)}}</span></div>
       <span class="dr-detail-right-amount"><span class="dr-detail-right-amount-positive" v-if="item.amount > 0">+</span><span :class="(item.amount < 0) ? 'dr-detail-right-amount' : 'dr-detail-right-amount-positive'">{{item.amount}}</span> 元</span>
     </div>
   </div>
@@ -13,7 +13,9 @@
 
 <script>
 export default {
+
   name: 'detail-record',
+
   props: {
     records: {
       type: Array,
@@ -44,7 +46,15 @@ export default {
       type: String,
       default: 'N/A'
     }
+  },
+
+  methods: {
+    normalizedDate (date) {
+      const tmpDate = new Date(date)
+      return tmpDate.toLocaleString()
+    }
   }
+
 }
 </script>
 
