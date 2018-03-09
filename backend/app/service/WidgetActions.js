@@ -73,29 +73,29 @@ module.exports = app => {
 
           return {
             status: false,
-            balance: null,
+            balance: 0,
             updateAt: null,
-            weeklyCost: null,
-            dailyRecords: null,
+            weeklyCost: 0,
+            dailyRecords: [],
           };
 
         }
 
         return {
           status: false,
-          balance: null,
+          balance: 0,
           updateAt: null,
-          weeklyCost: null,
-          dailyRecords: null,
+          weeklyCost: 0,
+          dailyRecords: [],
         };
 
       } catch (err) {
         return {
           status: false,
-          balance: null,
+          balance: 0,
           updateAt: null,
-          weeklyCost: null,
-          dailyRecords: null,
+          weeklyCost: 0,
+          dailyRecords: [],
         };
       }
 

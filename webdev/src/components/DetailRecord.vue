@@ -50,8 +50,7 @@ export default {
 
   methods: {
     normalizedDate (date) {
-      const tmpDate = new Date(date)
-      return tmpDate.toLocaleString()
+      return (new Date(date)).toLocaleString()
     }
   }
 

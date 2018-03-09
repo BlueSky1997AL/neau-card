@@ -261,11 +261,10 @@ module.exports = app => {
       let data = [];
       let totalCost = '';
       // 数据库查询指定查询范围内的数据信息
-      const _startDate = new Date([ startDate.slice(0, 4), startDate.slice(4, 6), startDate.slice(6, 8) ].join('-'));
-      const _endDate = new Date([ endDate.slice(0, 4), endDate.slice(4, 6), Number(endDate.slice(6, 8)) + 1 ].join('-'));
-      console.log(_endDate.toLocaleDateString());
       const usrInfo = await ctx.model.User.findOne({ accountId });
       if (usrInfo) {
+        const _startDate = new Date([ startDate.slice(0, 4), startDate.slice(4, 6), startDate.slice(6, 8) ].join('-'));
+        const _endDate = new Date([ endDate.slice(0, 4), endDate.slice(4, 6), Number(endDate.slice(6, 8)) + 1 ].join('-'));
         const result = await (ctx.model.Record.find({
           stuId: usrInfo.stuId,
           tradeDate: {
@@ -282,60 +281,39 @@ module.exports = app => {
             const nowYear = now.getFullYear();
 
             const today = new Date(nowYear, nowMonth, nowDate);
-            console.log(_newStartDate - today);
 
             if (_newStartDate - today > 0) {
-              console.log('全部数据由数据库提供:');
-              console.log(result);
               data = result;
             } else {
-              // 查询并存入数据库
-              // 日期格式化
-              const newStartDate = `${_newStartDate.getFullYear()}${_newStartDate.getMonth() < 9 ? '0' + (_newStartDate.getMonth() + 1) : _newStartDate.getMonth() + 1}${_newStartDate.getDate() < 9 ? '0' + _newStartDate.getDate() : _newStartDate.getDate()}`;
-              console.log('新的查询时间:');
-              console.log(newStartDate);
+              // 已有数据存入数据库
               data.push(...result);
-              const tmpData = (await this.dataFetcher(cookie, accountId, newStartDate, endDate)).records;
-              data.push(...tmpData);
-              console.log('经过了数据库查询操作, 操作结果:');
-              console.log('经过数据库获取到的信息:');
-              console.log(result);
-              console.log('经过爬虫获取到的信息:');
-              console.log(tmpData);
+              // 新的查询开始日期日期格式化
+              const newStartDate = `${_newStartDate.getFullYear()}${_newStartDate.getMonth() < 9 ? '0' + (_newStartDate.getMonth() + 1) : _newStartDate.getMonth() + 1}${_newStartDate.getDate() < 9 ? '0' + _newStartDate.getDate() : _newStartDate.getDate()}`;
+              // 根据新的查询开始日期查询相应流水信息
+              const crawlerData = (await this.dataFetcher(cookie, accountId, newStartDate, endDate)).records;
+              data.push(...crawlerData);
             }
-          } else {
-            const dbData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
-            data = dbData.records;
-            totalCost = dbData.totalCost;
-            console.log('经过了全新查询操作, 操作结果:');
-            console.log({
-              totalCost,
-              records: data,
+
+            // 计算一月开销
+            data.forEach(e => {
+              totalCost -= e.cost;
             });
+          } else {
+            // 全新查询
+            const crawlerData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
+            data = crawlerData.records;
+            totalCost = crawlerData.totalCost;
           }
 
-          data.forEach(e => {
-            totalCost -= e.cost;
-          });
         } else {
-          const dbData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
-          data = dbData.records;
-          totalCost = dbData.totalCost;
-          console.log('经过了全新查询操作, 操作结果:');
-          console.log({
-            totalCost,
-            records: data,
-          });
+          const crawlerData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
+          data = crawlerData.records;
+          totalCost = crawlerData.totalCost;
         }
       } else {
-        const dbData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
-        data = dbData.records;
-        totalCost = dbData.totalCost;
-        console.log('经过了全新查询操作, 操作结果:');
-        console.log({
-          totalCost,
-          records: data,
-        });
+        const crawlerData = (await this.dataFetcher(cookie, accountId, startDate, endDate));
+        data = crawlerData.records;
+        totalCost = crawlerData.totalCost;
       }
 
       // 获取所有数据成功后更新最近一次更新的时间
