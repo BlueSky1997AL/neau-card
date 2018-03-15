@@ -69,11 +69,24 @@ module.exports = app => {
     getBrief(html) {
       const $ = cheerio.load(html);
 
-      const content = $($('.bl')[1]).text().split(/共|页|\-|\（/);
-      return {
-        totalPages: content[4],
-        totalCost: content[2],
-      };
+      const content = $($('.bl')[1]).text().split(/共|页|交易额为:/);
+
+      let result;
+      try {
+        result = {
+          totalPages: content[3],
+          totalCost: Math.abs(parseFloat(content[2])).toFixed(2),
+        };
+      } catch (error) {
+        console.error('解析摘要信息(流水总页数, 流水总额)时出错: ');
+        console.error(error);
+        result = {
+          totalPages: '0',
+          totalCost: '0.00',
+        };
+      }
+
+      return result;
     }
 
     /**
