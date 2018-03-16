@@ -99,6 +99,98 @@ module.exports = app => {
       });
       return info.data;
     }
+
+    /**
+     * 获取用户的四六级缴费信息
+     * @param {String} cookie 用户登陆成功的 Cookie 字符串
+     * @return {Object} 用户缴费信息, 缴费id
+     */
+    async cet(cookie) {
+      try {
+        // 获取用户四六级缴费信息 HTML 数据
+        const info = await this.request('stusljfeelist.action', {
+          method: 'GET',
+          dataType: 'text',
+          headers: { cookie },
+        });
+
+        const $ = cheerio.load(info.data);
+
+        // 解析学生信息
+        const infoArr = [];
+        $('#tables tr[class="listbg"] td').each((i, e) => {
+          infoArr.push($(e).text());
+        });
+        const stuInfo = {
+          stuId: infoArr[0],
+          name: infoArr[1],
+          class: infoArr[2],
+          gender: infoArr[3],
+          idNo: infoArr[4],
+          lang: infoArr[5],
+          category: infoArr[6],
+          fee: infoArr[7],
+          status: infoArr[8].trim(),
+        };
+
+        let linkId = null;
+        // 获取缴费操作的 id 信息
+        if (stuInfo.status === '未缴费') {
+          linkId = $('#tables tr[class="listbg"] a').attr('href').split('id=')[1];
+        }
+
+        return { stuInfo, linkId };
+      } catch (error) {
+        console.log(error);
+        return {
+          stuInfo: null,
+          linkId: null,
+        };
+      }
+    }
+
+    /**
+     * 四六级缴费请求
+     * @param {String} cookie 登陆成功的 Cookie 信息
+     * @param {String} id 操作 ID 值
+     * @param {String} passwd 用户登陆密码
+     * @return {Object} 操作响应信息
+     */
+    async payForCET(cookie, id, passwd) {
+      try {
+        const data0 = await this.request('sljfeeload.action', {
+          method: 'GET',
+          dataType: 'text',
+          headers: { cookie },
+          data: { id },
+        });
+
+        const $0 = cheerio.load(data0.data);
+
+        const data1 = await this.request('sljJiaofeido.action', {
+          method: 'POST',
+          dataType: 'text',
+          headers: { cookie },
+          data: {
+            id,
+            merc: $0('input[name="merc"]').val(),
+            sno: $0('input[name="sno"]').val(),
+            name: $0('input[name="name"]').val(),
+            idno: $0('input[name="idno"]').val(),
+            yz: $0('input[name="yz"]').val(),
+            jib: $0('input[name="jib"]').val(),
+            bmf: $0('input[name="bmf"]').val(),
+            passwd,
+          },
+        });
+
+        const $1 = cheerio.load(data1.data);
+
+        return { msg: $1('p[class="biaotou"]').text() };
+      } catch (error) {
+        return { msg: '操作失败，请重试或联系开发人员以解决此问题' };
+      }
+    }
   }
   return LoginActions;
 };

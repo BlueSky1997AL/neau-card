@@ -32,6 +32,22 @@ module.exports = app => {
       const result = await ctx.service.loginActions.getUsrInfo(token);
       ctx.body = result;
     }
+
+    async cet() {
+      const ctx = this.ctx;
+      const { cookie } = ctx.query;
+
+      const result = await ctx.service.loginActions.cet(cookie);
+      ctx.body = result;
+    }
+
+    async payForCET() {
+      const ctx = this.ctx;
+      const { cookie, id, passwd } = ctx.query;
+
+      const result = await ctx.service.loginActions.payForCET(cookie, id, passwd);
+      ctx.body = result;
+    }
   }
   return LoginController;
 };

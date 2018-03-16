@@ -1,6 +1,13 @@
 <template>
   <div class="main-container">
     <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating"></info-card>
+
+    <div id="cet-card" @click="goToCETPage">
+      <span id="cet-card-title">四六级缴费</span>
+      <span id="cet-card-detail">点击查看详情</span>
+    </div>
+    <div id="cet-card-shadow"></div>
+
     <div class="section-label">最近七天消费</div>
     <line-chart :rec-data="recData"></line-chart>
     <detail-record class="dr-component" :records="records" :total-amount="totalAmount"></detail-record>
@@ -270,6 +277,11 @@ export default {
         psw = IDCardNo.substr(-6)
       }
       this.password = psw
+    },
+
+    async goToCETPage () {
+      console.log('触发页面跳转')
+      this.$router.push('/CET')
     }
   },
   watch: {
@@ -372,6 +384,42 @@ export default {
 
 body {
   background-color: white;
+}
+
+#cet-card {
+  padding: 0 15px;
+  height: 70px;
+  margin: 12px 0px 20px;
+  border-radius: 15px;
+  background-image: linear-gradient(45deg, #fa709a, #fee140);
+  z-index: 99;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+#cet-card-shadow {
+  height: 70px;
+  width: 83%;
+  border-radius: 15px;
+  background-image: linear-gradient(45deg, #fa709a, #fee140);
+  filter: blur(10px);
+  position: absolute;
+  left: 50%;
+  top: 240px;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  opacity: 0.5;
+}
+
+#cet-card-title {
+  font-size: 22px;
+  align-self: center;
+}
+
+#cet-card-detail {
+  font-size: 14px;
+  align-self: center;
 }
 
 .dr-component {

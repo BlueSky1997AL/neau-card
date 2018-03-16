@@ -7,15 +7,23 @@ import App from './App'
 // import LoginPage from './components/LoginPage'
 // import InfoCard from './components/InfoCard'
 import BalanceInfo from './views/BalanceInfo'
+import CET from '@/views/CET'
+import { ConfirmPlugin, AlertPlugin } from 'vux'
 // import LineChart from './components/LineChart'
 // import DetailRecord from './components/DetailRecord.vue'
 
 Vue.use(VueRouter)
+Vue.use(ConfirmPlugin)
+Vue.use(AlertPlugin)
 
 const routes = [
   {
     path: '/',
     component: BalanceInfo
+  },
+  {
+    path: '/cet',
+    component: CET
   }
   // {
   //   path: '/login',
