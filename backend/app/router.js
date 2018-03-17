@@ -14,4 +14,6 @@ module.exports = app => {
   app.get('/api/usrInfo', 'login.getUsrInfo');
 
   app.get('/api/widget/info', 'widget.getWidgetInfo');
+
+  app.get('/', 'home.homePage');
 };
