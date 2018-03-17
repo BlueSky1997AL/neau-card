@@ -1,64 +1,66 @@
 <template>
-  <div id="root">
+  <div id="component-root">
+    <div id="root">
 
-    <div id="stu-info-card">
-      <div id="stu-info-card-title-area">
-        <span id="stu-info-card-title">四六级缴费信息</span>
-        <div id="stu-info-card-btn-area">
-          <spinner v-if="isUpdating" id="stu-card-loading-spinner" type="ios-small" size="17px"></spinner>
-          <span v-if="isUpdating" id="stu-card-loading-msg">正在更新数据</span>
-          <div id="login-btn" @click="login()">登录</div>
+      <div id="stu-info-card">
+        <div id="stu-info-card-title-area">
+          <span id="stu-info-card-title">四六级缴费信息</span>
+          <div id="stu-info-card-btn-area">
+            <spinner v-if="isUpdating" id="stu-card-loading-spinner" type="ios-small" size="17px"></spinner>
+            <span v-if="isUpdating" id="stu-card-loading-msg">正在更新数据</span>
+            <div id="login-btn" @click="login()">登录</div>
+          </div>
+        </div>
+        <div id="info-area">
+          <div class="stu-info-card-cell"><span>学号: </span><span>{{stuId}}</span></div>
+          <div class="stu-info-card-cell"><span>姓名: </span><span>{{name}}</span></div>
+          <div class="stu-info-card-cell"><span>班级: </span><span>{{className}}</span></div>
+          <div class="stu-info-card-cell"><span>身份证号: </span><span>{{idNo}}</span></div>
+          <div class="stu-info-card-cell"><span>语种: </span><span>{{lang}}</span></div>
+          <div class="stu-info-card-cell"><span>级别: </span><span>{{category}}</span></div>
+          <div class="stu-info-card-cell"><span>费用: </span><span>{{fee}}</span></div>
+          <div class="stu-info-card-cell"><span>缴费状态: </span><span>{{status}}</span></div>
+          <div v-if="canPay" id="payment-btn-container">
+            <div id="payment-btn" @click="payForCET">缴费</div>
+          </div>
         </div>
       </div>
-      <div id="info-area">
-        <div class="stu-info-card-cell"><span>学号: </span><span>{{stuId}}</span></div>
-        <div class="stu-info-card-cell"><span>姓名: </span><span>{{name}}</span></div>
-        <div class="stu-info-card-cell"><span>班级: </span><span>{{className}}</span></div>
-        <div class="stu-info-card-cell"><span>身份证号: </span><span>{{idNo}}</span></div>
-        <div class="stu-info-card-cell"><span>语种: </span><span>{{lang}}</span></div>
-        <div class="stu-info-card-cell"><span>级别: </span><span>{{category}}</span></div>
-        <div class="stu-info-card-cell"><span>费用: </span><span>{{fee}}</span></div>
-        <div class="stu-info-card-cell"><span>缴费状态: </span><span>{{status}}</span></div>
-        <div v-if="canPay" id="payment-btn-container">
-          <div id="payment-btn" @click="payForCET">缴费</div>
+      <div id="stu-info-card-shadow"></div>
+
+      <div id="jser-logo">
+        <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
+      </div>
+
+      <!-- <button @click="login">触发登陆</button>
+      <button @click="payForCET">缴费</button> -->
+
+      <toast v-model="isUpdatingWarn" type="cancel" text="正在更新信息" width="8rem"></toast>
+      <loading :show="isPaying" text="正在缴费"></loading>
+      <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
+        <div id="dialog-container">
+          <group title="四六级缴费 - 登录">
+            <x-input type="text" title="学号" :disabled="false" placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
+            <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
+            <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
+              <div slot="right" class="captcha-container" @click="reloadCaptcha">
+                <spinner type="lines" id="captcha-loading-icon" v-if="captchaIsLoading"></spinner>
+                <img id="captcha" :src="captchaImg" v-show="!captchaIsLoading">
+              </div>
+            </x-input>
+          </group>
+
+          <box gap="10px 10px">
+            <x-button :gradients="['#37ecba', '#72afd3']" type="primary" text="登 录" :disabled="submitBtnDisabled" :show-loading="submitBtnShowLoading" action-type="submit" class="btn" @click.native="submit"></x-button>
+          </box>
+
+          <toast v-model="loginFailureWarn" type="cancel" position="top" :text="loginFailureMsg" width="11.5rem"></toast>
+          <toast v-model="stuIdWarn" type="cancel" position="top" text="学号信息错误" width="8rem"></toast>
+          <toast v-model="pswWarn" type="cancel" position="top" text="请输入密码" width="8rem"></toast>
+          <toast v-model="captchaWarn" type="cancel" position="top" text="请输入验证码" width="8rem"></toast>
         </div>
-      </div>
+      </x-dialog>
+
     </div>
-    <div id="stu-info-card-shadow"></div>
-
-    <div id="jser-logo">
-      <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
-    </div>
-
-    <!-- <button @click="login">触发登陆</button>
-    <button @click="payForCET">缴费</button> -->
-
-    <toast v-model="isUpdatingWarn" type="cancel" text="正在更新信息" width="8rem"></toast>
-    <loading :show="isPaying" text="正在缴费"></loading>
-    <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
-      <div id="dialog-container">
-        <group title="四六级缴费 - 登录">
-          <x-input type="text" title="学号" :disabled="false" placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
-          <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
-          <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
-            <div slot="right" class="captcha-container" @click="reloadCaptcha">
-              <spinner type="lines" id="captcha-loading-icon" v-if="captchaIsLoading"></spinner>
-              <img id="captcha" :src="captchaImg" v-show="!captchaIsLoading">
-            </div>
-          </x-input>
-        </group>
-
-        <box gap="10px 10px">
-          <x-button :gradients="['#37ecba', '#72afd3']" type="primary" text="登 录" :disabled="submitBtnDisabled" :show-loading="submitBtnShowLoading" action-type="submit" class="btn" @click.native="submit"></x-button>
-        </box>
-
-        <toast v-model="loginFailureWarn" type="cancel" position="top" :text="loginFailureMsg" width="11.5rem"></toast>
-        <toast v-model="stuIdWarn" type="cancel" position="top" text="学号信息错误" width="8rem"></toast>
-        <toast v-model="pswWarn" type="cancel" position="top" text="请输入密码" width="8rem"></toast>
-        <toast v-model="captchaWarn" type="cancel" position="top" text="请输入验证码" width="8rem"></toast>
-      </div>
-    </x-dialog>
-
   </div>
 </template>
 
@@ -270,6 +272,10 @@ export default {
     if (localStorage.psw) {
       this.password = localStorage.psw
     }
+
+    setTimeout(() => {
+      this.login()
+    }, 1000)
   }
 
 }

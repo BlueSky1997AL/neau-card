@@ -4,13 +4,9 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-// import LoginPage from './components/LoginPage'
-// import InfoCard from './components/InfoCard'
 import BalanceInfo from './views/BalanceInfo'
 import CET from '@/views/CET'
 import { ConfirmPlugin, AlertPlugin } from 'vux'
-// import LineChart from './components/LineChart'
-// import DetailRecord from './components/DetailRecord.vue'
 
 Vue.use(VueRouter)
 Vue.use(ConfirmPlugin)
@@ -25,22 +21,6 @@ const routes = [
     path: '/cet',
     component: CET
   }
-  // {
-  //   path: '/login',
-  //   component: LoginPage
-  // },
-  // {
-  //   path: '/cardCompDev',
-  //   component: InfoCard
-  // },
-  // {
-  //   path: '/lcCompDev',
-  //   component: LineChart
-  // },
-  // {
-  //   path: '/rdCompDev',
-  //   component: DetailRecord
-  // }
 ]
 
 const router = new VueRouter({

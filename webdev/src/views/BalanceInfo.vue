@@ -1,44 +1,46 @@
 <template>
-  <div class="main-container">
-    <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating"></info-card>
+  <div id="component-root">
+    <div class="main-container">
+      <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating"></info-card>
 
-    <div id="cet-card" @click="goToCETPage">
-      <span id="cet-card-title">四六级缴费</span>
-      <span id="cet-card-detail">点击查看详情</span>
-    </div>
-    <div id="cet-card-shadow"></div>
-
-    <div class="section-label">最近七天消费</div>
-    <line-chart :rec-data="recData"></line-chart>
-    <detail-record class="dr-component" :records="records" :total-amount="totalAmount"></detail-record>
-    <div id="jser-logo">
-      <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
-    </div>
-
-    <toast v-model="isUpdatingWarn" type="cancel" text="正在更新信息" width="8rem"></toast>
-    <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
-      <div id="dialog-container">
-        <group title="东农校内 - 更新数据">
-          <x-input type="text" title="学号" :disabled="false" placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
-          <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
-          <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
-            <div slot="right" class="captcha-container" @click="reloadCaptcha">
-              <spinner type="lines" id="captcha-loading-icon" v-if="captchaIsLoading"></spinner>
-              <img id="captcha" :src="captchaImg" v-show="!captchaIsLoading">
-            </div>
-          </x-input>
-        </group>
-
-        <box gap="10px 10px">
-          <x-button :gradients="['#1D62F0', '#19D5FD']" type="primary" text="更 新" :disabled="submitBtnDisabled" :show-loading="submitBtnShowLoading" action-type="submit" class="btn" @click.native="submit"></x-button>
-        </box>
-
-        <toast v-model="loginFailureWarn" type="cancel" position="top" :text="loginFailureMsg" width="11.5rem"></toast>
-        <toast v-model="stuIdWarn" type="cancel" position="top" text="学号信息错误" width="8rem"></toast>
-        <toast v-model="pswWarn" type="cancel" position="top" text="请输入密码" width="8rem"></toast>
-        <toast v-model="captchaWarn" type="cancel" position="top" text="请输入验证码" width="8rem"></toast>
+      <div id="cet-card" @click="goToCETPage">
+        <span id="cet-card-title">四六级缴费</span>
+        <span id="cet-card-detail">点击查看详情</span>
       </div>
-    </x-dialog>
+      <div id="cet-card-shadow"></div>
+
+      <div class="section-label">最近七天消费</div>
+      <line-chart :rec-data="recData"></line-chart>
+      <detail-record class="dr-component" :records="records" :total-amount="totalAmount"></detail-record>
+      <div id="jser-logo">
+        <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
+      </div>
+
+      <toast v-model="isUpdatingWarn" type="cancel" text="正在更新信息" width="8rem"></toast>
+      <x-dialog v-model="showLoginBox" hide-on-blur :dialog-style="dialogStyle">
+        <div id="dialog-container">
+          <group title="东农校内 - 更新数据">
+            <x-input type="text" title="学号" :disabled="false" placeholder="你的学号" v-model="stuId" placeholder-align="center" text-align="center" :show-clear="false"></x-input>
+            <x-input type="password" title="密码" placeholder="默认密码为身份证后六位" v-model="password" placeholder-align="center" text-align="center"></x-input>
+            <x-input title="验证码" class="weui-cell_vcode" text-align="center" :show-clear="false" v-model="captcha">
+              <div slot="right" class="captcha-container" @click="reloadCaptcha">
+                <spinner type="lines" id="captcha-loading-icon" v-if="captchaIsLoading"></spinner>
+                <img id="captcha" :src="captchaImg" v-show="!captchaIsLoading">
+              </div>
+            </x-input>
+          </group>
+
+          <box gap="10px 10px">
+            <x-button :gradients="['#1D62F0', '#19D5FD']" type="primary" text="更 新" :disabled="submitBtnDisabled" :show-loading="submitBtnShowLoading" action-type="submit" class="btn" @click.native="submit"></x-button>
+          </box>
+
+          <toast v-model="loginFailureWarn" type="cancel" position="top" :text="loginFailureMsg" width="11.5rem"></toast>
+          <toast v-model="stuIdWarn" type="cancel" position="top" text="学号信息错误" width="8rem"></toast>
+          <toast v-model="pswWarn" type="cancel" position="top" text="请输入密码" width="8rem"></toast>
+          <toast v-model="captchaWarn" type="cancel" position="top" text="请输入验证码" width="8rem"></toast>
+        </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 
@@ -280,7 +282,6 @@ export default {
     },
 
     async goToCETPage () {
-      console.log('触发页面跳转')
       this.$router.push('/CET')
     }
   },
@@ -359,7 +360,9 @@ export default {
       this.totalAmount = localStorage.totalAmount
     }
     if (!localStorage.basicInfo) {
-      this.updateData()
+      setTimeout(() => {
+        this.updateData()
+      }, 1000)
     }
   }
 }
