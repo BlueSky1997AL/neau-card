@@ -41,10 +41,20 @@ export default {
           }
         ]
       }
-    },
-    'total-amount': {
-      type: String,
-      default: 'N/A'
+    }
+  },
+
+  computed: {
+    totalAmount () {
+      try {
+        let sum = 0
+        this.records.forEach((e) => {
+          sum -= e.amount
+        })
+        return sum.toFixed(2)
+      } catch (error) {
+        return 'N/A'
+      }
     }
   },
 

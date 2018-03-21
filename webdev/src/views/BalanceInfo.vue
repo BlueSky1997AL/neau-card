@@ -11,7 +11,7 @@
 
       <div class="section-label">最近七天消费</div>
       <line-chart :rec-data="recData"></line-chart>
-      <detail-record class="dr-component" :records="records" :total-amount="totalAmount"></detail-record>
+      <detail-record class="dr-component" :records="records"></detail-record>
       <div id="jser-logo">
         <img id="jser-logo-img" src="../assets/jser_logo.svg" alt="Jser: The most powerful coding force in NEAU" title="Jser: The most powerful coding force in NEAU">
       </div>
@@ -105,7 +105,6 @@ export default {
       isUpdating: false,
 
       records: [],
-      totalAmount: 'N/A',
 
       isUpdatingWarn: false,
 
@@ -161,8 +160,6 @@ export default {
           const startDate = `${startDateObj.getFullYear()}${startDateObj.getMonth() < 9 ? '0' + (startDateObj.getMonth() + 1) : startDateObj.getMonth() + 1}${startDateObj.getDate() < 9 ? '0' + startDateObj.getDate() : startDateObj.getDate()}`
 
           const records = await axios.get(`/api/records?cookie=${this.cookie}&accountId=${basicInfo.data.accountId}&startDate=${startDate}&endDate=${endDate}`)
-          this.totalAmount = records.data.totalCost + ''
-          localStorage.totalAmount = this.totalAmount
 
           const totalRecords = [...(dailyRecords.data), ...(records.data.records)]
 
@@ -355,9 +352,6 @@ export default {
       this.recData.cost.forEach((v, i) => {
         this.recData.cost[i] = v.toFixed(2)
       })
-    }
-    if (localStorage.totalAmount) {
-      this.totalAmount = localStorage.totalAmount
     }
     if (!localStorage.basicInfo) {
       setTimeout(() => {
