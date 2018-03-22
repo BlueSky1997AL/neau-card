@@ -32,6 +32,7 @@ module.exports = app => {
           // 如果数据库中用户信息存在, 继续执行代码
           if (userInfo) {
             const balance = userInfo.balance;
+            const transBalance = userInfo.transBalance;
             const updateAt = userInfo.updatedAt;
 
             // 计算得查询日期 (七日/单日)
@@ -65,7 +66,7 @@ module.exports = app => {
             });
 
             // 返回数据
-            const result = { status: true, balance, updateAt, weeklyCost, dailyRecords };
+            const result = { status: true, balance, transBalance, updateAt, weeklyCost, dailyRecords };
 
             return result;
 
@@ -74,6 +75,7 @@ module.exports = app => {
           return {
             status: false,
             balance: 0,
+            transBalance: 0,
             updateAt: null,
             weeklyCost: 0,
             dailyRecords: [],
@@ -84,6 +86,7 @@ module.exports = app => {
         return {
           status: false,
           balance: 0,
+          transBalance: 0,
           updateAt: null,
           weeklyCost: 0,
           dailyRecords: [],
@@ -93,6 +96,7 @@ module.exports = app => {
         return {
           status: false,
           balance: 0,
+          transBalance: 0,
           updateAt: null,
           weeklyCost: 0,
           dailyRecords: [],
