@@ -5,6 +5,7 @@
       <img src="https://alsu-storage.b0.upaiyun.com/neau-card/static/img/neau_logo.svg" alt="neau_logo" id="logo">
       <div id="balance-container">
         <span id="balance">余额：{{displayedBalance}}</span>
+        <div id="trans-balance-container" v-if="showTransBalance"><span id="trans-balance">&nbsp;+&nbsp;{{_transBalance}}</span></div>
         <div id="show-balance-btn" v-html="showBtn" @click="toggleDisplay()"></div>
       </div>
       <div id="update">
@@ -51,9 +52,29 @@ export default {
       default: function () {
         alert('Balance card dev info.')
       }
+    },
+    transBalance: {
+      type: String,
+      default: '0.00元'
     }
   },
   components: { Spinner },
+  computed: {
+    _transBalance () {
+      try {
+        return parseFloat(this.transBalance).toFixed(2)
+      } catch (error) {
+        console.error(error)
+        return '0.00'
+      }
+    },
+    showTransBalance () {
+      if (this.displayStatus && this._transBalance !== '0.00') {
+        return true
+      }
+      return false
+    }
+  },
   data () {
     return {
       displayedBalance: '',
@@ -98,7 +119,6 @@ export default {
       this.$emit('display-status-change', val)
     }
   },
-  computed: {},
   created: function () {
     this.refreshInfo()
   }
@@ -170,6 +190,10 @@ export default {
 
   #balance {
     font-size: 30px;
+  }
+
+  #trans-balance-container {
+    height: 30px;
   }
 
   #show-balance-btn {

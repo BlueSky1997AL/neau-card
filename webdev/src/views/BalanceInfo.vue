@@ -1,7 +1,7 @@
 <template>
   <div id="component-root">
     <div class="main-container">
-      <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating"></info-card>
+      <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating" :transBalance="transBalance"></info-card>
 
       <div id="cet-card" @click="goToCETPage">
         <span id="cet-card-title">四六级缴费</span>
@@ -73,6 +73,7 @@ export default {
       showStatus: true,
       balance: 'N/A',
       updateTime: 'N/A',
+      transBalance: '0.00元',
 
       showLoginBox: false,
 
@@ -147,6 +148,7 @@ export default {
           localStorage.basicInfo = JSON.stringify(basicInfo.data)
 
           this.balance = parseFloat(basicInfo.data.balance) + ''
+          this.transBalance = basicInfo.data.transBalance
 
           // if (localStorage.records) {
           //   // dev code block
@@ -302,6 +304,7 @@ export default {
       const basicInfo = JSON.parse(localStorage.basicInfo)
       this.stuId = basicInfo.stuId
       this.balance = parseFloat(basicInfo.balance) + ''
+      this.transBalance = basicInfo.transBalance
     }
     if (localStorage.psw) {
       this.password = localStorage.psw
