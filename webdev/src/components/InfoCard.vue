@@ -5,7 +5,7 @@
       <img src="https://alsu-storage.b0.upaiyun.com/neau-card/static/img/neau_logo.svg" alt="neau_logo" id="logo">
       <div id="balance-container">
         <span id="balance">余额：{{displayedBalance}}</span>
-        <div id="trans-balance-container" v-if="showTransBalance"><span id="trans-balance">&nbsp;+&nbsp;{{_transBalance}}</span></div>
+        <div id="trans-balance-container" v-if="showTransBalance"><div id="trans-balance">&nbsp;+&nbsp;{{_transBalance}}</div></div>
         <div id="show-balance-btn" v-html="showBtn" @click="toggleDisplay()"></div>
       </div>
       <div id="update">
@@ -144,9 +144,9 @@ export default {
     width: 100%;
     border-radius: 15px;
     background-image: linear-gradient(45deg, #14E7FF, #5107FF 30%, #06DAFC);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     z-index: 1;
     color: white;
   }
@@ -161,7 +161,7 @@ export default {
     left: 50%;
     top: 5.3rem;
     transform: translate(-50%, -50%);
-    z-index: 0;
+    z-index: -1;
     opacity: 0.5;
   }
 
@@ -170,22 +170,17 @@ export default {
     right: 10px;
     top: 10px;
     width: 40px;
-    height: 40px;
   }
 
   #stuid-label {
     font-size: 12px;
-    position: absolute;
-    top: 10px;
-    left: 15px;
+    margin-left: 10px;
   }
 
   #balance-container {
+    margin-left: 15px;
     display: flex;
     align-items: center;
-    position: absolute;
-    top: 47.5px;
-    left: 15px;
   }
 
   #balance {
@@ -196,6 +191,11 @@ export default {
     height: 30px;
   }
 
+  #trans-balance {
+    line-height: 1rem;
+    margin-top: 1px;
+  }
+
   #show-balance-btn {
     width: 25px;
     height: 15px;
@@ -204,10 +204,9 @@ export default {
 
   #update {
     font-size: 12px;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
     display: inline-block;
+    align-self: flex-end;
+    margin-right: 10px;
   }
 
   #update-btn {
