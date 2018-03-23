@@ -366,12 +366,10 @@ export default {
 </script>
 
 <style scoped>
-/* Dev Style Sheet Start*/
+
 * {
-  font-family: 苹方;
   user-select: none;
 }
-/* Dev Style Sheet End*/
 
 .main-container {
   padding: 12px 25px;
@@ -464,4 +462,5 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 </style>

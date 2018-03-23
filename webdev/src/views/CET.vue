@@ -283,6 +283,10 @@ export default {
 
 <style scoped>
 
+  * {
+    user-select: none;
+  }
+
   #root {
     padding: 20px;
   }

@@ -15,6 +15,10 @@ export default {
 <style lang="less">
 @import '~vux/src/styles/reset.less';
 
+* {
+  font-family: '苹方', 'Pingfang SC', 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+}
+
 body {
   background-color: #fbf9fe;
 }
