@@ -3,11 +3,11 @@
     <div class="main-container">
       <info-card :stu-id="stuId" :balance="balance" :update-time="updateTime" :show-info="showStatus" @display-status-change="changeDisplayStatus" :update="updateData" :is-updating="isUpdating" :transBalance="transBalance"></info-card>
 
-      <div id="cet-card" @click="goToCETPage">
+      <div id="cet-card" @click="goToCETPage" v-if="false">
         <span id="cet-card-title">四六级缴费</span>
         <span id="cet-card-detail">点击查看详情</span>
       </div>
-      <div id="cet-card-shadow"></div>
+      <div id="cet-card-shadow" v-if="false"></div>
 
       <div class="section-label">最近七天消费</div>
       <line-chart :rec-data="recData"></line-chart>
