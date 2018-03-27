@@ -279,19 +279,18 @@ module.exports = app => {
       // 数据库查询用户信息是否存在(是否使用过系统)
       const usrInfo = await ctx.model.User.findOne({ accountId });
 
-
       if (usrInfo) {
         // 数据库中存在用户的情况
 
-        // 将字符串格式的日期转换为日期对象
-        const _startDate = new Date([ startDate.slice(0, 4), startDate.slice(4, 6), startDate.slice(6, 8) ].join('-'));
-        const _endDate = new Date([ endDate.slice(0, 4), endDate.slice(4, 6), Number(endDate.slice(6, 8)) + 1 ].join('-'));
-
         // 查询该用户最后一次成功更新的时间
-        const _newStartDate = (await ctx.model.User.findOne({ stuId: usrInfo.stuId })).latestUpdateAt;
+        const latestUpdateAt = (await ctx.model.User.findOne({ stuId: usrInfo.stuId })).latestUpdateAt;
 
-        if (_newStartDate) {
+        if (latestUpdateAt) {
           // 如果该用户存在 latestUpdateAt 字段
+
+          // 定义数据库查询开始和终止日期对象
+          const _startDate = new Date(`${[ startDate.slice(0, 4), startDate.slice(4, 6), startDate.slice(6, 8) ].join('-')} 00:00:00`);
+          const _endDate = new Date(latestUpdateAt.getFullYear(), latestUpdateAt.getMonth(), latestUpdateAt.getDate(), '00', '00', '00');
 
           // 获取现在时间的年, 月, 日
           const now = new Date();
@@ -300,7 +299,7 @@ module.exports = app => {
           const nowYear = now.getFullYear();
 
           // 定义今天 00:00 时刻的日期对象
-          const today = new Date(nowYear, nowMonth, nowDate);
+          const today = new Date(nowYear, nowMonth, nowDate, '00', '00', '00');
 
           // 查询数据库中存在的该用户的流水记录
           const result = await (ctx.model.Record.find({
@@ -311,7 +310,7 @@ module.exports = app => {
             },
           }));
 
-          if (_newStartDate - today > 0) {
+          if (latestUpdateAt - today > 0) {
             // 如果最后一次成功查询时间在今天
             // 直接返回数据库查询结果
             data = result;
@@ -322,7 +321,7 @@ module.exports = app => {
             data.push(...result);
 
             // 新的查询开始日期格式化
-            const newStartDate = `${_newStartDate.getFullYear()}${_newStartDate.getMonth() < 9 ? '0' + (_newStartDate.getMonth() + 1) : _newStartDate.getMonth() + 1}${_newStartDate.getDate() < 9 ? '0' + _newStartDate.getDate() : _newStartDate.getDate()}`;
+            const newStartDate = `${latestUpdateAt.getFullYear()}${latestUpdateAt.getMonth() < 9 ? '0' + (latestUpdateAt.getMonth() + 1) : latestUpdateAt.getMonth() + 1}${latestUpdateAt.getDate() < 9 ? '0' + latestUpdateAt.getDate() : latestUpdateAt.getDate()}`;
 
             // 根据新的查询开始日期查询相应流水信息
             const crawlerData = (await this.dataFetcher(cookie, accountId, newStartDate, endDate)).records;
