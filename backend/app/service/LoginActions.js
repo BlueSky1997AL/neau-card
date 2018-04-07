@@ -29,13 +29,18 @@ module.exports = app => {
      * @return {String} Cookie string
      */
     async getCookie() {
-      const data = await this.request('homeLogin.action', {
-        method: 'GET',
-        dataType: 'text',
-      });
-      const cookie = data.headers['set-cookie'][0].split(';')[0];
+      try {
+        const data = await this.request('homeLogin.action', {
+          method: 'GET',
+          dataType: 'text',
+        });
+        const cookie = data.headers['set-cookie'][0].split(';')[0];
 
-      return cookie;
+        return cookie;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     }
 
     /**
@@ -44,12 +49,17 @@ module.exports = app => {
      * @return {Buffer} Base64 image buffer
      */
     async getCaptcha(cookie) {
-      const data = await this.request('getCheckpic.action', {
-        method: 'GET',
-        headers: { cookie },
-      });
+      try {
+        const data = await this.request('getCheckpic.action', {
+          method: 'GET',
+          headers: { cookie },
+        });
 
-      return data.data;
+        return data.data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     }
 
     /**
@@ -61,27 +71,32 @@ module.exports = app => {
      * @return {Object} An object including login status and messages
      */
     async login(stuId, psw, captcha, cookie) {
-      const data = await this.request('loginstudent.action', {
-        method: 'POST',
-        dataType: 'text',
-        headers: { cookie },
-        data: {
-          name: stuId,
-          userType: 1,
-          passwd: psw,
-          loginType: 2,
-          rand: captcha,
-          'imageField.x': 0,
-          'imageField.y': 0,
-        },
-      });
+      try {
+        const data = await this.request('loginstudent.action', {
+          method: 'POST',
+          dataType: 'text',
+          headers: { cookie },
+          data: {
+            name: stuId,
+            userType: 1,
+            passwd: psw,
+            loginType: 2,
+            rand: captcha,
+            'imageField.x': 0,
+            'imageField.y': 0,
+          },
+        });
 
-      if (data.data.includes('校园卡查询系统-持卡人查询界面')) {
-        return { status: 'success', msg: '登陆成功' };
+        if (data.data.includes('校园卡查询系统-持卡人查询界面')) {
+          return { status: 'success', msg: '登陆成功' };
+        }
+
+        const $ = cheerio.load(data.data);
+        return { status: 'failure', msg: $('.biaotou').text() };
+      } catch (error) {
+        console.error(error);
+        return { status: 'failure', msg: '出现未知错误, 请联系开发者以解决此问题(Login)' };
       }
-
-      const $ = cheerio.load(data.data);
-      return { status: 'failure', msg: $('.biaotou').text() };
     }
 
     /**
@@ -90,14 +105,19 @@ module.exports = app => {
      * @return {Object} 查询结果
      */
     async getUsrInfo(token) {
-      const info = await this.ctx.curl('https://jwc.xiaonei.io/student/get', {
-        method: 'GET',
-        dataType: 'json',
-        headers: {
-          authorization: 'aid ' + token,
-        },
-      });
-      return info.data;
+      try {
+        const info = await this.ctx.curl('https://jwc.xiaonei.io/student/get', {
+          method: 'GET',
+          dataType: 'json',
+          headers: {
+            authorization: 'aid ' + token,
+          },
+        });
+        return info.data;
+      } catch (error) {
+        console.error(error);
+        return {}
+      }
     }
 
     /**
