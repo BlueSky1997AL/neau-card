@@ -2,7 +2,9 @@
 
 > &#x1F393; [东北农业大学(以下简称为NEAU)官方校园卡信息查询平台](http://card.neau.edu.cn)（只能使用校园网打开）
 
-**项目预览地址：&#x1F449;** [https://card.xiaonei.io](https://card.xiaonei.io)
+**项目预览地址：&#x1F449;** [https://card.xiaonei.io](https://card.xiaonei.io)  
+&#x1F447; **或扫描二维码**  
+![二维码](asset/qr_code.png)
 
 &#x1F625;鉴于NEAU官方校园卡查询系统只能在校园网内网中使用，并且没有移动端  
 &#x1F4A1;为了方便同学们随时查询校园卡余额和流水信息，以及进行四六级一键缴费  
