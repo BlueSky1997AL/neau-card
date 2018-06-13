@@ -16,19 +16,19 @@
 
 ## 克隆/开发
 
-```shell
-# 克隆代码
-git clone https://github.com/BlueSky1997AL/neau-card.git
+```bash
+  # 克隆代码
+  git clone https://github.com/BlueSky1997AL/neau-card.git
 ```
 
-```shell
-# 目录结构
-. neau-card
-├── asset       # README.md中用到的图像资源
-├── backend     # 后端项目
-├── webdev      # 前端项目
-├── .gitignore  # git 忽略列表
-└── README.md   # 本说明文件
+```bash
+  # 目录结构
+  . neau-card
+  ├── asset       # README.md中用到的图像资源
+  ├── backend     # 后端项目
+  ├── webdev      # 前端项目
+  ├── .gitignore  # git 忽略列表
+  └── README.md   # 本说明文件
 ```
 
 > &#x26A0; Tips：更多详细项目介绍/开发信息请移步  
