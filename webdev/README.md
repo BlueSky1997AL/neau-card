@@ -4,18 +4,18 @@
 
 ## 要求
 
-  + 查询平台后台已启动
   + Node.js v8+
+  + 查询平台后台已启动
 
 ## 安装 / 开始开发
 
 ```bash
   # 安装依赖
-  cd webdev
-  npm install
+  $ cd webdev
+  $ npm install
 
   # 启动开发模式
-  npm run dev
+  $ npm run dev
 ```
 
 > &#x26A0; Tips：应用将会运行在 [http://localhost:8080](http://localhost:8080)
@@ -81,21 +81,21 @@
 
 ```js
   // config/inedx.js
-  ...
-  module.exports = {
     ...
-    dev: {
+    module.exports = {
       ...
-      // 在 dev 中添加 proxyTable 相关配置即可
-      proxyTable: {
-        // 转发 /api 路由到 7001 端口
-        '/api': {
-          target: 'http://localhost:7001',
-          changeOrigin: true
+      dev: {
+        ...
+        // 在 dev 中添加 proxyTable 相关配置即可
+        proxyTable: {
+          // 转发 /api 路由到 7001 端口
+          '/api': {
+            target: 'http://localhost:7001',
+            changeOrigin: true
+          }
         }
       }
     }
-  }
 ```
 
 > &#x26A0; Tips：在生产环境中，将已编译好的文件合并入后端系统中时不会出现跨域问题，因为前端请求路由与后端路由处于同一域名和端口下。此处的跨域问题仅出现在开发过程中
@@ -106,10 +106,10 @@
 
 ```bash
   # 生产环境编译
-  npm run build
+  $ npm run build
 
   # 如果您需要查看 bundle analyzer 报告，也可以加上 --report 参数
-  npm run build --report
+  $ npm run build --report
 ```
 
 编译成功后，将 `dist` 目录中编译好的文件转移至后端静态资源文件夹中即可  
@@ -138,6 +138,10 @@
 ```bash
   https://card.xiaonei.io/?rand=${Math.random()}
 ```
+
+## ToDos
+
+  + 折线图有待加入更为实用的功能
 
 ## 代码风格指南
 

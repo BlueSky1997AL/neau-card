@@ -2,7 +2,7 @@
 
 > &#x1F393; [东北农业大学(以下简称为NEAU)官方校园卡信息查询平台](http://card.neau.edu.cn)（只能使用校园网打开）
 
-**项目预览地址：&#x1F449;** [https://card.xiaonei.io](https://card.xiaonei.io)
+**项目预览地址：&#x1F449;** [https://card.xiaonei.io](https://card.xiaonei.io) 或 扫描二维码
 
 ![二维码](asset/qr_code.png)
 
@@ -20,7 +20,7 @@
 
 ```bash
   # 克隆代码
-  git clone https://github.com/BlueSky1997AL/neau-card.git
+  $ git clone https://github.com/BlueSky1997AL/neau-card.git
 ```
 
 ```bash
